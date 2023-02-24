@@ -1,7 +1,9 @@
 package com.example.jubtibe.domain.recipe.entity;
 
+import com.example.jubtibe.domain.comments.entity.Comments;
 import com.example.jubtibe.domain.like.entity.Like;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
+import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +37,10 @@ public class Recipe {
 
     @Column
     private LocalDateTime modifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
     @OneToMany
     @JoinColumn(name = "commentsId")
