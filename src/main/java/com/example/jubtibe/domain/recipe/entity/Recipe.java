@@ -22,7 +22,7 @@ public class Recipe {
     private String title;
 
     @Column(nullable = false)
-    private Enum mbti;
+    private Enum userMbti;
 
     @Column(nullable = false)
     private String content;
@@ -46,14 +46,14 @@ public class Recipe {
 
     public Recipe(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.mbti = requestDto.getMbti();
+        this.userMbti = requestDto.getUserMbti();
         this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
     }
 
     public void update(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.mbti = requestDto.getMbti();
+        this.userMbti = requestDto.getUserMbti();
         this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
     }
