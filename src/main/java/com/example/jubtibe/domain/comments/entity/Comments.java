@@ -1,4 +1,4 @@
-package com.example.jubtibe.domain.comment.entity;
+package com.example.jubtibe.domain.comments.entity;
 
 import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
