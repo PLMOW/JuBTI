@@ -1,6 +1,5 @@
 package com.example.jubtibe.domain.user.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.persistence.*;
