@@ -13,7 +13,7 @@ public class Comment {
     private Long commentId;
 
     @Column(nullable = false)
-    private String comment;
+    private String comments;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
@@ -21,5 +21,5 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="recipeId")
-    private Recipe reciqe;
+    private Recipe recipe;
 }
