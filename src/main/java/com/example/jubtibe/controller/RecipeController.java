@@ -40,6 +40,6 @@ public class RecipeController {
 
     @DeleteMapping("/recipe/{id}")
     public StatusResponseDto delete(@PathVariable Long id, @RequestBody RecipeRequestDto requestDto){
-        return recipeService.delteRecipe(id, requestDto);
+        return recipeService.deleteRecipe(id, requestDto);
     }
 }
