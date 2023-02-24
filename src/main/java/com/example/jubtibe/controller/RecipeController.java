@@ -1,6 +1,14 @@
 package com.example.jubtibe.controller;
 
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
+import com.example.jubtibe.domain.recipe.service.RecipeService;
+import com.example.jubtibe.dto.StatusResponseDto;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
