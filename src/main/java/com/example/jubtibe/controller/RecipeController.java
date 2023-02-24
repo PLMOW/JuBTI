@@ -25,7 +25,7 @@ public class RecipeController {
 
     @GetMapping("/recipe")
     public List<RecipeRequestDto> getRecipes(){
-        return recipeService.getRecipe();
+        return recipeService.getRecipes();
     }
 
     @GetMapping("/recipe/{id}")
