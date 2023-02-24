@@ -7,13 +7,14 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class Comment {
+public class Comments {
+    //작성자 권재현
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
     @Column(nullable = false)
-    private String comment;
+    private String comments;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
@@ -21,5 +22,5 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="recipeId")
-    private Recipe reciqe;
+    private Recipe recipe;
 }
