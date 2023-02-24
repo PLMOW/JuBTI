@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 public class User {
+    //작성자 : 권재현
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
