@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+    // 작성자 : 조영준
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
