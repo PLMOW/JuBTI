@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class Comment {
+public class Comments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
