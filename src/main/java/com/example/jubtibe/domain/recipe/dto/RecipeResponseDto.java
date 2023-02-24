@@ -15,8 +15,8 @@ public class RecipeResponseDto {
     private String title;
     private String material;
     private String content;
-    private int like;
     private Enum userMbti;
+    private Like like;
     private List<Comments> comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
