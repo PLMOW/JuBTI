@@ -23,5 +23,5 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Mbti mbti;
+    private UserMbti userMbti;
 }
