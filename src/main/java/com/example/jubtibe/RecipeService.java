@@ -1,4 +1,4 @@
-package com.example.jubtibe.domain.recipe.service;
+package com.example.jubtibe;
 
 import com.example.jubtibe.RecipeRepository;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;

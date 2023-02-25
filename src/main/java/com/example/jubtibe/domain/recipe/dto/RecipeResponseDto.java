@@ -14,6 +14,7 @@ import java.util.List;
 public class RecipeResponseDto {
     //    작성자 박성민
     //    이미지파일 받아오기
+    private Long id;
     private String nickname;
     private String title;
     private String material;
@@ -25,12 +26,13 @@ public class RecipeResponseDto {
     private LocalDateTime modifiedAt;
 
     public RecipeResponseDto(Recipe recipe, List<Comments> comments) {
-        this.nickname = recipe.getUser().getNickname();
-        this.title = recipe.getTitle();
-        this.material = recipe.getMaterial();
-        this.content = recipe.getContent();
-        this.userMbti = recipe.getUserMbti();
-        this.like = recipe.getLike();
+        this id = recipe.getRecipeId();
+        this.nickname = getNickname();
+        this.title = getTitle();
+        this.material = getMaterial();
+        this.content = getContent();
+        this.mbti = getMbti();
+        this.like = getLike();
         this.comments = comments;
     }
 }
