@@ -2,6 +2,7 @@ package com.example.jubtibe.controller;
 
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
+import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
 import com.example.jubtibe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe")
-    public List<RecipeResponseDto> getRecipes(){
+    public List<RecipeSearchDto> getRecipes(){
         return recipeService.getRecipes();
     }
 
