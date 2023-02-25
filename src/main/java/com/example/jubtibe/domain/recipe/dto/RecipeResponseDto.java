@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class RecipeResponseDto {
     //    작성자 박성민
     //    이미지파일 받아오기
+    private Long id;
     private String nickname;
     private String title;
     private String material;
@@ -22,6 +23,7 @@ public class RecipeResponseDto {
     private LocalDateTime modifiedAt;
 
     public RecipeResponseDto(Recipe recipe, List<Comments> comments) {
+        this id = recipe.getRecipeId();
         this.nickname = getNickname();
         this.title = getTitle();
         this.material = getMaterial();
