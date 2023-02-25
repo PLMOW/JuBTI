@@ -28,12 +28,14 @@ public class RecipeResponseDto {
 
     public RecipeResponseDto(Recipe recipe, List<Comment> comments) {
         this.id = recipe.getRecipeId();
-        this.nickname = getNickname();
-        this.title = getTitle();
-        this.material = getMaterial();
-        this.content = getContent();
-        this.userMbti = getUserMbti();
-        this.like = getLike();
+        this.nickname = recipe.getUser().getNickname();
+        this.title = recipe.getTitle();
+        this.material = recipe.getMaterial();
+        this.content = recipe.getContent();
+        this.userMbti = recipe.getUserMbti();
+        this.like = recipe.getLike();
         this.comments = comments;
+        this.createdAt = recipe.getCreatedAt();
+        this.modifiedAt = recipe.getModifiedAt();
     }
 }

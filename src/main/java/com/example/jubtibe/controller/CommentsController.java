@@ -1,7 +1,7 @@
 package com.example.jubtibe.controller;
 
 
-import com.example.jubtibe.domain.comments.dto.CommentsRequestDto;
+import com.example.jubtibe.domain.comment.dto.CommentsRequestDto;
 import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.security.UserDetailsImpl;
 import com.example.jubtibe.service.CommentsService;

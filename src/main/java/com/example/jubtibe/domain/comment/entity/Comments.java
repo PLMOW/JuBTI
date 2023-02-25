@@ -1,6 +1,6 @@
-package com.example.jubtibe.domain.comments.entity;
+package com.example.jubtibe.domain.comment.entity;
 
-import com.example.jubtibe.domain.comments.dto.CommentsRequestDto;
+import com.example.jubtibe.domain.comment.dto.CommentsRequestDto;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
