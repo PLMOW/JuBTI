@@ -1,7 +1,9 @@
 package com.example.jubtibe.domain.recipe.entity;
 
+import com.example.jubtibe.domain.comments.entity.Comments;
 import com.example.jubtibe.domain.like.entity.Like;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
+import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +24,7 @@ public class Recipe {
     private String title;
 
     @Column(nullable = false)
-    private Enum mbti;
+    private Enum userMbti;
 
     @Column(nullable = false)
     private String content;
@@ -36,6 +38,10 @@ public class Recipe {
     @Column
     private LocalDateTime modifiedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
     @OneToMany
     @JoinColumn(name = "commentsId")
     private Comments comments;
@@ -46,14 +52,14 @@ public class Recipe {
 
     public Recipe(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.mbti = requestDto.getMbti();
+        this.userMbti = requestDto.getUserMbti();
         this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
     }
 
     public void update(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.mbti = requestDto.getMbti();
+        this.userMbti = requestDto.getUserMbti();
         this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
     }

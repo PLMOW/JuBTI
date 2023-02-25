@@ -1,10 +1,13 @@
 package com.example.jubtibe.domain.recipe.dto;
 
+import com.example.jubtibe.domain.comments.entity.Comments;
+import com.example.jubtibe.domain.like.entity.Like;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,8 +19,8 @@ public class RecipeResponseDto {
     private String title;
     private String material;
     private String content;
-    private Enum mbti;
-    private int like;
+    private Enum userMbti;
+    private Like like;
     private List<Comments> comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
