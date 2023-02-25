@@ -28,14 +28,18 @@ public class CommentService {
         return StatusResponseDto.success(200,"작성 완료");
     }
     @Transactional
-    public StatusResponseDto updateComments(Long commentsid, CommentRequestDto requestDto, String username) {
+    public StatusResponseDto<?> updateComments(Long commentsid, CommentRequestDto requestDto, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
         Comment comments = commentRepository.findById(commentsid).orElseThrow(()->new IllegalArgumentException());
         if(!comments.getUser().equals(user)){
             new IllegalArgumentException("본인 댓글만 수정 가능");
         }
         comments.update(requestDto);
-        return StatusResponseDto.success(200,"수정 완료");
+
+        return StatusResponseDto.builder()
+                .statusCode(200)
+                .msg("수정 완료")
+                .build();
     }
 
     @Transactional
