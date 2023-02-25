@@ -2,6 +2,7 @@ package com.example.jubtibe.service;
 
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
+import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.repository.RecipeRepository;
@@ -25,11 +26,11 @@ public class RecipeService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecipeResponseDto> getRecipes() {
+    public List<RecipeSearchDto> getRecipes() {
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
-        List<RecipeResponseDto> responseDtoList = new ArrayList<>();
+        List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for(Recipe recipe : recipeList){
-            responseDtoList.add(new RecipeResponseDto(recipe, List<Comments> comments));
+            responseDtoList.add(new RecipeSearchDto(recipe));
         }
         return responseDtoList;
     }
