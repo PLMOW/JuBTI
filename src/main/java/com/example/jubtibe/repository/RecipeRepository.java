@@ -1,4 +1,4 @@
-package com.example.jubtibe;
+package com.example.jubtibe.repository;
 
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;

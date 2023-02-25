@@ -1,5 +1,6 @@
 package com.example.jubtibe.domain.comments.entity;
 
+import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
 
