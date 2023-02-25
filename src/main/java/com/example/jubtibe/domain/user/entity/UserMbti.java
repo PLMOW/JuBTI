@@ -16,6 +16,6 @@ public enum UserMbti {
     ESFP,
     ENTJ,
     ENTP,
-    ENFJ
-    ,ENFP
+    ENFJ,
+    ENFP
 }

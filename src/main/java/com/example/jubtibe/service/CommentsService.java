@@ -1,6 +1,5 @@
 package com.example.jubtibe.service;
 
-import com.example.jubtibe.RecipeRepository;
 import com.example.jubtibe.domain.comments.dto.CommentsRequestDto;
 import com.example.jubtibe.domain.comments.entity.Comments;
 import com.example.jubtibe.domain.recipe.entity.Recipe;

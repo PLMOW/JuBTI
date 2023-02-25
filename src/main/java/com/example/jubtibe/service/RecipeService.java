@@ -1,10 +1,10 @@
-package com.example.jubtibe;
+package com.example.jubtibe.service;
 
-import com.example.jubtibe.RecipeRepository;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

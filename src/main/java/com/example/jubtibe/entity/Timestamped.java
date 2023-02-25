@@ -1,4 +1,4 @@
-package com.example.jubtibe.domain.recipe.entity;
+package com.example.jubtibe.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

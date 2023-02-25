@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    //작성자 권재현, 조영준
     Optional<User> findByUsername(String username);
 }

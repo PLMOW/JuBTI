@@ -3,6 +3,7 @@ package com.example.jubtibe.controller;
 
 import com.example.jubtibe.domain.comments.dto.CommentsRequestDto;
 import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.service.CommentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class CommentsController {
         return commentsService.updateComments(id,requestDto);
     }
     @DeleteMapping("/recipe/comment/{commentId}")
-    public StatusResponseDto deleteComments(@PathVariable Long id @RequestBody CommentsRequestDto requestdto){
-        return commentsService.deleteComments(id,requestdto);
+    public StatusResponseDto deleteComments(@PathVariable Long commentId ,@RequestBody CommentsRequestDto requestDto){
+        return commentsService.deleteComments(commentId,requestDto);
     }
 }

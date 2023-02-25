@@ -26,12 +26,12 @@ public class RecipeResponseDto {
     private LocalDateTime modifiedAt;
 
     public RecipeResponseDto(Recipe recipe, List<Comments> comments) {
-        this id = recipe.getRecipeId();
+        this.id = recipe.getRecipeId();
         this.nickname = getNickname();
         this.title = getTitle();
         this.material = getMaterial();
         this.content = getContent();
-        this.mbti = getMbti();
+        this.userMbti = getUserMbti();
         this.like = getLike();
         this.comments = comments;
     }

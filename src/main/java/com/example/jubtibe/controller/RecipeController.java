@@ -2,7 +2,7 @@ package com.example.jubtibe.controller;
 
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
-import com.example.jubtibe.RecipeService;
+import com.example.jubtibe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
