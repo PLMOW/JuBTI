@@ -30,7 +30,7 @@ public class RecipeService {
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for(Recipe recipe : recipeList){
-            responseDtoList.add(new RecipeSearchDto(recipe);
+            responseDtoList.add(new RecipeSearchDto(recipe));
         }
         return responseDtoList;
     }
