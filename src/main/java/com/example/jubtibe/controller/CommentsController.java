@@ -24,6 +24,6 @@ public class CommentsController {
     }
     @DeleteMapping("/recipe/comment/{commentId}")
     public StatusResponseDto deleteComments(@PathVariable Long id @RequestBody CommentsRequestDto requestdto){
-        return commentsService.deleteComments(id,requestdto)
+        return commentsService.deleteComments(id,requestdto);
     }
 }
