@@ -1,6 +1,7 @@
 package com.example.jubtibe.jwt;
 
-import com.example.jubtibe.exception.CustomExceptionDto;
+import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.exception.CustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = jwtUtil.resolveToken(request);
 
-        if(token != null) { // 토큰이 없는 경우 수행될 로직
+        if(token != null) {
             if(!jwtUtil.validateToken(token)){
                 jwtExceptionHandler(response, "토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
                 return;
@@ -51,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         response.setStatus(statusCode);
         response.setContentType("application/json");
         try {
-            String json = new ObjectMapper().writeValueAsString(new CustomExceptionDto(statusCode, msg));
+            String json = new ObjectMapper().writeValueAsString(new StatusResponseDto<>(msg, statusCode));
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());
