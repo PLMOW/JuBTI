@@ -1,5 +1,6 @@
 package com.example.jubtibe.controller;
 
+import com.example.jubtibe.domain.user.dto.LoginRequestDto;
 import com.example.jubtibe.domain.user.dto.SignUpRequestDto;
 import com.example.jubtibe.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -24,6 +26,12 @@ public class UserController {
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequestDto signupRequestDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) return ResponseEntity.status(400).body(bindingResult.getAllErrors());
         userService.signUp(signupRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
+    }
+
+    @PostMapping("/login")//로그인
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response){
+        userService.login(requestDto,response);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 }
