@@ -1,15 +1,17 @@
 package com.example.jubtibe.domain.comment.entity;
 
-import com.example.jubtibe.domain.comment.dto.CommentsRequestDto;
+import com.example.jubtibe.domain.comment.dto.CommentRequestDto;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
-public class Comments {
+@NoArgsConstructor
+public class Comment {
     //작성자 권재현
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +28,13 @@ public class Comments {
     @JoinColumn(name="recipeId")
     private Recipe recipe;
 
-    public Comments(User user, Recipe recipe, CommentsRequestDto requestDto){
+    public Comment(User user, Recipe recipe, CommentRequestDto requestDto){
     this.user=user;
     this.recipe=recipe;
     comments=requestDto.getComments();
     }
 
-    public void update(CommentsRequestDto requestDto) {
+    public void update(CommentRequestDto requestDto) {
         this.comments = requestDto.getComments();
     }
 }
