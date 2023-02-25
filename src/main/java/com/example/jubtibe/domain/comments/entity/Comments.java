@@ -1,5 +1,6 @@
 package com.example.jubtibe.domain.comments.entity;
 
+import com.example.jubtibe.domain.comments.dto.CommentsRequestDto;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
@@ -24,4 +25,14 @@ public class Comments {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="recipeId")
     private Recipe recipe;
+
+    public Comments(User user, Recipe recipe, CommentsRequestDto requestDto){
+    this.user=user;
+    this.recipe=recipe;
+    comments=requestDto.getComments();
+    }
+
+    public void update(CommentsRequestDto requestDto) {
+        this.comments = requestDto.getComments();
+    }
 }
