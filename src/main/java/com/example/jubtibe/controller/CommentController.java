@@ -22,7 +22,7 @@ public class CommentController {
     }
 
     @PutMapping("/recipe/comment/{commentId}")
-    public StatusResponseDto updateComments(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public StatusResponseDto<?> updateComments(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return commentService.updateComments(commentId,requestDto,userDetails.getUsername());
     }
     @DeleteMapping("/recipe/comment/{commentId}")
