@@ -1,5 +1,6 @@
 package com.example.jubtibe.service;
 
+import com.example.jubtibe.domain.user.dto.LoginRequestDto;
 import com.example.jubtibe.domain.user.dto.SignUpRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserMbti;
@@ -51,21 +52,17 @@ public class UserService {
         userRepository.save(user);
     }
 
-//    @Transactional(readOnly = true)
-//    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response){
-//        String username = loginRequestDto.getUsername();
-//        String password = loginRequestDto.getPassword();
-//
-//        User user = userRepository.findByUsername(username).orElseThrow(
-//                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-//        );
-//
-//        if(!passwordEncoder.matches(password, user.getPassword())){
-//            throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
-//
-//        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
-//
-//    }
+    @Transactional(readOnly = true)
+    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response){
+        String username = loginRequestDto.getUsername();
+        String password = loginRequestDto.getPassword();
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+        );
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+    }
 
 }
