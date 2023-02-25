@@ -41,4 +41,5 @@ public class RecipeController {
     public StatusResponseDto deleteRecipe(@PathVariable Long id){
         return recipeService.deleteRecipe(id);
     }
+    
 }
