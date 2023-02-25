@@ -17,12 +17,8 @@ public class RecipeSearchDto {
     private Long id;
     private String nickname;
     private String title;
-    private String material;
-    private String content;
     private Enum userMbti;
     private Like like;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
 
     public RecipeSearchDto(Recipe recipe) {
         this.id = recipe.getRecipeId();
