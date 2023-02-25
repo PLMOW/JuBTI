@@ -8,6 +8,7 @@ import com.example.jubtibe.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping("/recipe")
-    public StatusResponseDto createRecipe(@Valid @RequestBody RecipeRequestDto requestDto){
-        return recipeService.createRecipe(requestDto);
+    public StatusResponseDto createRecipe(@Valid @RequestBody RecipeRequestDto requestDto, HttpServletRequest request){
+        return recipeService.createRecipe(requestDto, request);
     }
 
     @GetMapping("/recipe")
@@ -34,13 +35,13 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{id}")
-    public StatusResponseDto updateRecipe(@Valid @PathVariable Long id, @RequestBody RecipeRequestDto requestDto){
-        return recipeService.updateRecipe(id, requestDto);
+    public StatusResponseDto updateRecipe(@Valid @PathVariable Long id, @RequestBody RecipeRequestDto requestDto, HttpServletRequest request){
+        return recipeService.updateRecipe(id, requestDto, request);
     }
 
     @DeleteMapping("/recipe/{id}")
-    public StatusResponseDto deleteRecipe(@PathVariable Long id){
-        return recipeService.deleteRecipe(id);
+    public StatusResponseDto deleteRecipe(@PathVariable Long id, HttpServletRequest request){
+        return recipeService.deleteRecipe(id, request);
     }
     
 }
