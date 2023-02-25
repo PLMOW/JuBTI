@@ -4,11 +4,13 @@ import com.example.jubtibe.domain.comment.dto.CommentRequestDto;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Comment {
     //작성자 권재현
     @Id
