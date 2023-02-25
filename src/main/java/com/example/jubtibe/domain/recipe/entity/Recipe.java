@@ -44,7 +44,7 @@ public class Recipe {
 
     @OneToMany
     @JoinColumn(name = "commentsId")
-    private Comments comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany
     @JoinColumn(name = "likeId")
