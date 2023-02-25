@@ -1,6 +1,6 @@
 package com.example.jubtibe.domain.recipe.entity;
 
-import com.example.jubtibe.domain.comments.entity.Comments;
+import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.like.entity.Like;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -43,7 +45,7 @@ public class Recipe {
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "commentsId")
+    @JoinColumn(name = "commentId")
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany
