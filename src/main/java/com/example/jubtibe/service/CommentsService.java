@@ -1,7 +1,7 @@
 package com.example.jubtibe.service;
 
-import com.example.jubtibe.domain.comments.dto.CommentsRequestDto;
-import com.example.jubtibe.domain.comments.entity.Comments;
+import com.example.jubtibe.domain.comment.dto.CommentsRequestDto;
+import com.example.jubtibe.domain.comment.entity.Comments;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.dto.StatusResponseDto;

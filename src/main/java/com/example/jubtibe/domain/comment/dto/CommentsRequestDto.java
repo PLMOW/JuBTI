@@ -1,4 +1,4 @@
-package com.example.jubtibe.domain.comments.dto;
+package com.example.jubtibe.domain.comment.dto;
 
 
 import lombok.Getter;
