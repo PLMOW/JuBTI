@@ -3,12 +3,12 @@ package com.example.jubtibe.controller;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
+import com.example.jubtibe.security.UserDetailsImpl;
 import com.example.jubtibe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping("/recipe")
-    public StatusResponseDto createRecipe(@Valid @RequestBody RecipeRequestDto requestDto, HttpServletRequest request){
-        return recipeService.createRecipe(requestDto, request);
+    public StatusResponseDto createRecipe(@Valid @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return recipeService.createRecipe(requestDto, userDetails);
     }
 
     @GetMapping("/recipe")
@@ -35,13 +35,13 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{id}")
-    public StatusResponseDto updateRecipe(@Valid @PathVariable Long id, @RequestBody RecipeRequestDto requestDto, HttpServletRequest request){
-        return recipeService.updateRecipe(id, requestDto, request);
+    public StatusResponseDto updateRecipe(@Valid @PathVariable Long id, @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return recipeService.updateRecipe(id, requestDto, userDetails);
     }
 
     @DeleteMapping("/recipe/{id}")
-    public StatusResponseDto deleteRecipe(@PathVariable Long id, HttpServletRequest request){
-        return recipeService.deleteRecipe(id, request);
+    public StatusResponseDto deleteRecipe(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return recipeService.deleteRecipe(id, userDetails);
     }
     
 }
