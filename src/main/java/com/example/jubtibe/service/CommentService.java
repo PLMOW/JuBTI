@@ -5,6 +5,8 @@ import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.exception.CustomException;
+import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.repository.CommentRepository;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
@@ -21,9 +23,9 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public StatusResponseDto createComments(Long id, CommentRequestDto requestDto, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
-        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+    public StatusResponseDto<?> createComments(Long id, CommentRequestDto requestDto, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CLIENT));
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         commentRepository.save(new Comment(user,recipe,requestDto));
         return StatusResponseDto.builder()
                 .statusCode(200)
@@ -32,10 +34,10 @@ public class CommentService {
     }
     @Transactional
     public StatusResponseDto<?> updateComments(Long commentsid, CommentRequestDto requestDto, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
-        Comment comments = commentRepository.findById(commentsid).orElseThrow(()->new IllegalArgumentException());
+        User user = userRepository.findByUsername(username).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CLIENT));
+        Comment comments = commentRepository.findById(commentsid).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         if(!comments.getUser().equals(user)){
-            new IllegalArgumentException("본인 댓글만 수정 가능");
+            new IllegalArgumentException("본인 댓글만 수정 가능합니다.");
         }
         comments.update(requestDto);
         return StatusResponseDto.builder()
@@ -45,11 +47,11 @@ public class CommentService {
     }
 
     @Transactional
-    public StatusResponseDto deleteComments(Long commentsId,String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
-        Comment comments = commentRepository.findById(commentsId).orElseThrow(()->new IllegalArgumentException());
+    public StatusResponseDto<?> deleteComments(Long commentsId,String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CLIENT));
+        Comment comments = commentRepository.findById(commentsId).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         if(!comments.getUser().equals(user)){
-            new IllegalArgumentException("본인 댓글만 삭제 가능");
+            new IllegalArgumentException("본인 댓글만 삭제 가능합니다");
         }
         commentRepository.deleteById(commentsId);
         return StatusResponseDto.builder()
