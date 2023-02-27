@@ -2,6 +2,7 @@ package com.example.jubtibe.domain.recipe.dto;
 
 import com.example.jubtibe.domain.like.entity.Like;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
+import com.example.jubtibe.domain.user.entity.UserMbti;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,14 +18,14 @@ public class RecipeSearchDto {
     private Long id;
     private String nickname;
     private String title;
-    private Enum userMbti;
+    private UserMbti mbti;
     private Like like;
 
     public RecipeSearchDto(Recipe recipe) {
         this.id = recipe.getRecipeId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
-        this.userMbti = recipe.getUserMbti();
+        this.mbti = recipe.getMbti();
         this.like = recipe.getLike();
     }
 }
