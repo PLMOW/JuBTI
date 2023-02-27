@@ -1,5 +1,7 @@
 package com.example.jubtibe.service;
 
+import com.example.jubtibe.domain.comment.dto.CommentResponseDto;
+import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
@@ -10,6 +12,7 @@ import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.repository.RecipeLikeRepository;
+import com.example.jubtibe.repository.CommentRepository;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class RecipeService {
     // 작성자 박성민
     private final RecipeRepository recipeRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
 
@@ -54,7 +58,12 @@ public class RecipeService {
     public RecipeResponseDto getRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         int likes = recipeLikeRepository.countByRecipe(recipe);
-        return new RecipeResponseDto(recipe,likes);
+        List<CommentResponseDto> commentresponse =new ArrayList<>();
+        for (Comment res : comment) {
+            CommentResponseDto commentResponseDto = new CommentResponseDto(res);
+            commentresponse.add(commentResponseDto);
+        }
+        return new RecipeResponseDto(recipe,commentresponse,likes);
     }
 
     @Transactional
