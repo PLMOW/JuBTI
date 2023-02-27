@@ -40,6 +40,7 @@ public class CommentService {
             new IllegalArgumentException("본인 댓글만 수정 가능합니다.");
         }
         comments.update(requestDto);
+
         return StatusResponseDto.builder()
                 .statusCode(200)
                 .msg("수정 완료")

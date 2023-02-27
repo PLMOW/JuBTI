@@ -14,7 +14,7 @@ public class SignUpRequestDto {
     private String username;
     @Pattern(regexp = "[a-z0-9]{4,10}")
     private String nickname;
-    @Pattern(regexp = "[!@#$%^&*][A-Za-z0-9]{8,15}")
+    @Pattern(regexp = "[\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-_+<>@\\#$%&\\\\\\=\\(\\'\\\"A-Za-z0-9]{8,15}",message = "대소문자와 숫자만 가능합니다")
     private String password;
     @Enumerated(value = EnumType.STRING)
     private UserMbti mbti;
