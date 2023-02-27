@@ -7,6 +7,7 @@ import lombok.Getter;
 import javax.persistence.*;
 
 @Getter
+@Entity
 public class Like {
     //작성자 박성민, 권재현
     @Id
