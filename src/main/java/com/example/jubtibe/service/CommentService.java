@@ -25,7 +25,6 @@ public class CommentService {
         User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
         commentRepository.save(new Comment(user,recipe,requestDto));
-//        return StatusResponseDto.success(200,"작성 완료");
         return StatusResponseDto.builder()
                 .statusCode(200)
                 .msg("작성 완료")
