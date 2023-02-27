@@ -1,6 +1,5 @@
 package com.example.jubtibe.domain.recipe.dto;
 
-import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.like.entity.RecipeLike;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.UserMbti;
@@ -22,11 +21,11 @@ public class RecipeResponseDto {
     private String content;
     private UserMbti mbti;
     private RecipeLike recipeLike;
-    private List<Comment> comments;
+    private List comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public RecipeResponseDto(Recipe recipe, List<Comment> comments) {
+    public RecipeResponseDto(Recipe recipe, List comments) {
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
