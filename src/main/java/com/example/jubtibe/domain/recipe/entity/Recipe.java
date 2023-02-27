@@ -1,7 +1,7 @@
 package com.example.jubtibe.domain.recipe.entity;
 
 import com.example.jubtibe.domain.comment.entity.Comment;
-import com.example.jubtibe.domain.like.entity.Like;
+import com.example.jubtibe.domain.like.entity.RecipeLike;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserMbti;
@@ -45,13 +45,11 @@ public class Recipe {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany
-    @JoinColumn(name = "commentId")
+    @OneToMany(mappedBy = "recipe",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "likeId")
-    private Like like;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeLike> recipeLikes = new ArrayList<>();
 
     public Recipe(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();

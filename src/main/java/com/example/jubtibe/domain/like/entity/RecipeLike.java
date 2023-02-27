@@ -7,11 +7,12 @@ import lombok.Getter;
 import javax.persistence.*;
 
 @Getter
-public class Like {
+@Entity
+public class RecipeLike {
     //작성자 박성민, 권재현
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
@@ -20,4 +21,5 @@ public class Like {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="recipeId")
     private Recipe recipe;
+
 }

@@ -15,7 +15,7 @@ public class Comment {
     //작성자 권재현
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long id;
 
     @Column(nullable = false)
     private String comments;

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
-@Entity
+@Entity(name = "users")
 @NoArgsConstructor
 public class User {
     //작성자 : 권재현 , 조영준
