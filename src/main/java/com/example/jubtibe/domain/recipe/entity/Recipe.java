@@ -45,13 +45,13 @@ public class Recipe {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     @JoinColumn(name = "commentId")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     @JoinColumn(name = "likeId")
-    private Like like;
+    private List<Like> like;
 
     public Recipe(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();
