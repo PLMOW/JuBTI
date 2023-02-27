@@ -27,7 +27,7 @@ public class RecipeResponseDto {
     private LocalDateTime modifiedAt;
 
     public RecipeResponseDto(Recipe recipe, List<Comment> comments) {
-        this.id = recipe.getRecipeId();
+        this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
         this.material = recipe.getMaterial();
