@@ -7,15 +7,13 @@ import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserRoleEnum;
 import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.exception.CustomException;
+import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
-import com.example.jubtibe.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class RecipeService {
     @Transactional
     public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username) {
         userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("회원가입 후 작성 가능합니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         recipeRepository.save(new Recipe(requestDto));
 
@@ -51,7 +49,7 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public RecipeResponseDto getRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
         );
         return new RecipeResponseDto(recipe,recipe.getComments());
     }
@@ -59,7 +57,7 @@ public class RecipeService {
     @Transactional
     public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("회원가입 후 작성 가능합니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
@@ -79,16 +77,15 @@ public class RecipeService {
     }
 
     @Transactional
-    public StatusResponseDto deleteRecipe(Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userDetails.getUser();
-        userRepository.findByUsername(user.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("삭제 권한이 없습니다.")
+    public StatusResponseDto deleteRecipe(Long id, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
         );
 
-        if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(user.getUsername())){
+        if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipeRepository.delete(recipe);
         }else return StatusResponseDto.builder()
                 .statusCode(400)
