@@ -23,4 +23,9 @@ public class RecipeLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="recipeId")
     private Recipe recipe;
+
+    public RecipeLike(User user, Recipe recipe){
+        this.user=user;
+        this.recipe=recipe;
+    }
 }
