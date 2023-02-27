@@ -32,9 +32,11 @@ public class RecipeService {
         );
         recipeRepository.save(new Recipe(requestDto));
 
-        return StatusResponseDto.success(200, "레시피 작성 완료");
+        return StatusResponseDto.builder()
+                .status(200)
+                .msg("작성 완료")
+                .build();
     }
-
     @Transactional(readOnly = true)
     public List<RecipeSearchDto> getRecipes() {
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
@@ -63,11 +65,17 @@ public class RecipeService {
                 () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
         );
 
-        if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(user.getUsername())){
+        if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(user.getUsername())){
             recipe.update(requestDto);
-        }else return StatusResponseDto.fail(400, "수정 권한이 없습니다.");
+        }else return StatusResponseDto.builder()
+                .statusCode(400)
+                .msg("수정 권한이 없습니다.")
+                .build();
 
-        return StatusResponseDto.success(200, "수정완료");
+        return StatusResponseDto.builder()
+                .status(200)
+                .msg("수정 완료")
+                .build();
     }
 
     @Transactional
@@ -82,8 +90,14 @@ public class RecipeService {
 
         if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(user.getUsername())){
             recipeRepository.delete(recipe);
-        }else return StatusResponseDto.fail(400, "삭제 권한이 없습니다.");
+        }else return StatusResponseDto.builder()
+                .statusCode(400)
+                .msg("삭제 권한이 없습니다.")
+                .build();
 
-        return StatusResponseDto.success(200, "삭제완료");
+        return StatusResponseDto.builder()
+                .status(200)
+                .msg("삭제 완료")
+                .build();
     }
 }
