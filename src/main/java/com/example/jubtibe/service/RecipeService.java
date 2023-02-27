@@ -79,16 +79,15 @@ public class RecipeService {
     }
 
     @Transactional
-    public StatusResponseDto deleteRecipe(Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userDetails.getUser();
-        userRepository.findByUsername(user.getUsername()).orElseThrow(
+    public StatusResponseDto deleteRecipe(Long id, String username) {
+        userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("삭제 권한이 없습니다.")
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
         );
 
-        if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(user.getUsername())){
+        if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipeRepository.delete(recipe);
         }else return StatusResponseDto.builder()
                 .statusCode(400)
