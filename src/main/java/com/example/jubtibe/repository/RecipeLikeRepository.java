@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface RecipeLikeRepository extends JpaRepository<RecipeLike, Long> {
-    int countByRecipe();
+//    int countByRecipe();
     Optional<RecipeLike> findByUser(User user);
     void deleteByUser(User user);
 }
