@@ -4,6 +4,7 @@ import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.like.entity.Like;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
+import com.example.jubtibe.domain.user.entity.UserMbti;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class RecipeResponseDto {
     private String title;
     private String material;
     private String content;
-    private Enum userMbti;
+    private UserMbti mbti;
     private Like like;
     private List<Comment> comments;
     private LocalDateTime createdAt;
@@ -32,7 +33,7 @@ public class RecipeResponseDto {
         this.title = recipe.getTitle();
         this.material = recipe.getMaterial();
         this.content = recipe.getContent();
-        this.userMbti = recipe.getUserMbti();
+        this.mbti = recipe.getMbti();
         this.like = recipe.getLike();
         this.comments = comments;
         this.createdAt = recipe.getCreatedAt();

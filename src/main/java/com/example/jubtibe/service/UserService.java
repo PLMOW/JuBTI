@@ -34,7 +34,7 @@ public class UserService {
         String username = signUpRequestDto.getUsername();
         String nickname = signUpRequestDto.getNickname();
         String password = passwordEncoder.encode(signUpRequestDto.getPassword());
-        UserMbti userMbti = signUpRequestDto.getMbti();
+        UserMbti mbti = signUpRequestDto.getMbti();
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_USERS);
@@ -48,7 +48,7 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(username, nickname, password, role, userMbti);
+        User user = new User(username, nickname, password, role, mbti);
         userRepository.save(user);
     }
 
