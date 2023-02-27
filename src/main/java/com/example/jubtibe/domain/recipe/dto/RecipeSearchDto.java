@@ -19,7 +19,7 @@ public class RecipeSearchDto {
     private RecipeLike recipeLike;
 
     public RecipeSearchDto(Recipe recipe) {
-        this.id = recipe.getRecipeId();
+        this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
         this.mbti = recipe.getMbti();
