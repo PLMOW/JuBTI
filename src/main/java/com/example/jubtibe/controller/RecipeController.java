@@ -8,6 +8,7 @@ import com.example.jubtibe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import javax.validation.Valid;
 import java.util.List;
