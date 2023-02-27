@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
@@ -61,18 +63,15 @@ public class RecipeService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
         );
 
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipe.update(requestDto);
-            return StatusResponseDto.builder()
-                    .statusCode(200)
-                    .msg("수정 완료")
-                    .build();
-        }else return StatusResponseDto.builder()
-                .statusCode(400)
-                .msg("수정 권한이 없습니다.")
+        }else new CustomException(ErrorCode.UNAUTHORIZED_USER);
+        return StatusResponseDto.builder()
+                .statusCode(200)
+                .msg("수정 완료")
                 .build();
     }
 
@@ -87,10 +86,7 @@ public class RecipeService {
 
         if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipeRepository.delete(recipe);
-        }else return StatusResponseDto.builder()
-                .statusCode(400)
-                .msg("삭제 권한이 없습니다.")
-                .build();
+        }else new CustomException(ErrorCode.UNAUTHORIZED_USER);
 
         return StatusResponseDto.builder()
                 .statusCode(200)
