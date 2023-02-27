@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/recipe/{id}/like")
+@RequestMapping("/api/recipe/{id}")
 public class RecipeLikeController {
     // 작성자 박성민
     private final RecipeLikeService recipeLikeService;
@@ -21,8 +21,8 @@ public class RecipeLikeController {
         return recipeLikeService.like(id, userDetails.getUsername());
     }
 
-    @DeleteMapping
-    public StatusResponseDto dislike(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeLikeService.dislike(id, userDetails.getUsername());
-    }
+//    @DeleteMapping
+//    public StatusResponseDto dislike(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//        return recipeLikeService.dislike(id, userDetails.getUsername());
+//    }
 }
