@@ -36,7 +36,7 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{id}")
-    public StatusResponseDto updateRecipe(@Valid @PathVariable Long id, @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public StatusResponseDto updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return recipeService.updateRecipe(id, requestDto, userDetails.getUsername());
     }
 
