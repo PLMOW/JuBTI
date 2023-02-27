@@ -11,13 +11,9 @@ import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
-import com.example.jubtibe.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +78,7 @@ public class RecipeService {
 
     @Transactional
     public StatusResponseDto deleteRecipe(Long id, String username) {
-        userRepository.findByUsername(username).orElseThrow(
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
