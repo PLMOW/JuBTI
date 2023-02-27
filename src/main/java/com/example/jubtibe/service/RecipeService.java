@@ -26,10 +26,10 @@ public class RecipeService {
 
     @Transactional
     public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username) {
-        userRepository.findByUsername(username).orElseThrow(
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
-        recipeRepository.save(new Recipe(requestDto));
+        recipeRepository.save(new Recipe(requestDto, user));
 
         return StatusResponseDto.builder()
                 .statusCode(200)
