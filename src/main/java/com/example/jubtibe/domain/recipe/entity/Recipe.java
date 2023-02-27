@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class Recipe extends Timestamped {
     private String title;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserMbti mbti;
 
     @Column(nullable = false)
@@ -36,28 +36,28 @@ public class Recipe extends Timestamped {
     @Column(nullable = false)
     private String material;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "recipe",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private List<RecipeLike> recipeLikes = new ArrayList<>();
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecipeLike> likes = new ArrayList<>();
 
     public Recipe(RecipeRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
-        this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
+        this.content = requestDto.getContent();
         this.user = user;
     }
 
     public void update(RecipeRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
-        this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
+        this.content = requestDto.getContent();
     }
 }
