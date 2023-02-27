@@ -25,7 +25,7 @@ public class RecipeSearchDto {
         this.id = recipe.getRecipeId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
-        this.mbti = recipe.getUserMbti();
+        this.mbti = recipe.getMbti();
         this.like = recipe.getLike();
     }
 }
