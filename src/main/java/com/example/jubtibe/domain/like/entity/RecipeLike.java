@@ -8,11 +8,11 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class Like {
+public class RecipeLike {
     //작성자 박성민, 권재현
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
