@@ -11,6 +11,7 @@ import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
 import com.example.jubtibe.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,9 +27,8 @@ public class RecipeService {
     private final UserRepository userRepository;
 
     @Transactional
-    public StatusResponseDto createRecipe(RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        userRepository.findByUsername(user.getUsername()).orElseThrow(
+    public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username) {
+        userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("회원가입 후 작성 가능합니다.")
         );
         recipeRepository.save(new Recipe(requestDto));
@@ -57,16 +57,15 @@ public class RecipeService {
     }
 
     @Transactional
-    public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        userRepository.findByUsername(user.getUsername()).orElseThrow(
+    public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("회원가입 후 작성 가능합니다.")
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
         );
 
-        if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(user.getUsername())){
+        if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipe.update(requestDto);
         }else return StatusResponseDto.builder()
                 .statusCode(400)
@@ -80,7 +79,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public StatusResponseDto deleteRecipe(Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public StatusResponseDto deleteRecipe(Long id, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userDetails.getUser();
         userRepository.findByUsername(user.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("삭제 권한이 없습니다.")
