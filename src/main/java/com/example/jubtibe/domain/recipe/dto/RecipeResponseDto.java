@@ -21,19 +21,20 @@ public class RecipeResponseDto {
     private String material;
     private String content;
     private UserMbti mbti;
-    private RecipeLike recipeLike;
-    private List<Comment> comments;
+    private Integer recipeLike;
+//    private List<Comment> comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public RecipeResponseDto(Recipe recipe, List<Comment> comments) {
+    public RecipeResponseDto(Recipe recipe,Integer recipeLike) {
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
         this.material = recipe.getMaterial();
         this.content = recipe.getContent();
         this.mbti = recipe.getMbti();
-        this.comments = comments;
+        this.recipeLike = recipeLike;
+//        this.comments = comments;
         this.createdAt = recipe.getCreatedAt();
         this.modifiedAt = recipe.getModifiedAt();
     }

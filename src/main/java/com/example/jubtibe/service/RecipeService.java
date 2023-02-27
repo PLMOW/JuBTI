@@ -9,6 +9,7 @@ import com.example.jubtibe.domain.user.entity.UserRoleEnum;
 import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
+import com.example.jubtibe.repository.RecipeLikeRepository;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class RecipeService {
     // 작성자 박성민
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final RecipeLikeRepository recipeLikeRepository;
 
     @Transactional
     public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username) {
@@ -48,10 +50,9 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public RecipeResponseDto getRecipe(Long id) {
-        Recipe recipe = recipeRepository.findById(id).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
-        );
-        return new RecipeResponseDto(recipe,recipe.getComments());
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
+        int likes = recipeLikeRepository.countByRecipe(recipe);
+        return new RecipeResponseDto(recipe,likes);
     }
 
     @Transactional
@@ -65,14 +66,13 @@ public class RecipeService {
 
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipe.update(requestDto);
+            return StatusResponseDto.builder()
+                    .statusCode(200)
+                    .msg("수정 완료")
+                    .build();
         }else return StatusResponseDto.builder()
                 .statusCode(400)
                 .msg("수정 권한이 없습니다.")
-                .build();
-
-        return StatusResponseDto.builder()
-                .statusCode(200)
-                .msg("수정 완료")
                 .build();
     }
 

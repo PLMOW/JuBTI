@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.List;
 
 @Getter
 public class RecipeRequestDto {
@@ -16,4 +17,5 @@ public class RecipeRequestDto {
     private UserMbti mbti;
     private String material;
     private String content;
+//    private List<RecipeRequestDto> recipeLike;
 }
