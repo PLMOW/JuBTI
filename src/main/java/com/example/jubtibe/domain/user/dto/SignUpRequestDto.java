@@ -11,8 +11,8 @@ import javax.validation.constraints.Pattern;
 @Getter
 public class SignUpRequestDto {
     //작성자 권재현 , 조영준
-    private String username;
     @Pattern(regexp = "[a-z0-9]{4,10}")
+    private String username;
     private String nickname;
     @Pattern(regexp = "[!@#$%^&*][A-Za-z0-9]{8,15}")
     private String password;
