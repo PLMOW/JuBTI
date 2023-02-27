@@ -31,15 +31,20 @@ public class RecipeLikeService {
         );
         if (!recipeLikeRepository.findByUser(user).isEmpty()){
             recipeLikeRepository.deleteByUser(user);
+            return StatusResponseDto.builder()
+                    .statusCode(200)
+                    .msg("좋아요 취소")
+                    .build();
         }
         else {
             RecipeLike like = new RecipeLike(user, recipe);
             recipeLikeRepository.save(like);
+            return StatusResponseDto.builder()
+                    .statusCode(200)
+                    .msg("좋아요")
+                    .build();
         }
-        return StatusResponseDto.builder()
-                .statusCode(200)
-                .msg("좋아요")
-                .build();
+
     }
 
 //    @Transactional
