@@ -1,6 +1,7 @@
 package com.example.jubtibe.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ import java.util.List;
 @Builder
 public class ErrorResponse {
     private final int status;
-    //    private final String error;
-    //    private final String code;
+//        private final String error;
+//        private final String code;
     private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -43,6 +44,7 @@ public class ErrorResponse {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    @AllArgsConstructor
     public static class ValidationError{
 
         private String field;
