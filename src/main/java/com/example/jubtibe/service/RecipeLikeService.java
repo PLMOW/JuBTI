@@ -22,7 +22,7 @@ public class RecipeLikeService {
     private final RecipeLikeRepository recipeLikeRepository;
 
     @Transactional
-    public StatusResponseDto like (Long id, String username){
+    public StatusResponseDto recipeLike (Long id, String username){
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
