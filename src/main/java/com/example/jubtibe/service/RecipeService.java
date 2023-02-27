@@ -7,6 +7,7 @@ import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserRoleEnum;
 import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.entity.Timestamped;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.repository.RecipeRepository;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RecipeService {
+public class RecipeService extends Timestamped {
     // 작성자 박성민
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
