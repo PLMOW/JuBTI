@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +16,8 @@ public class RecipeLikeController {
     private final RecipeLikeService recipeLikeService;
 
     @PostMapping
-    public StatusResponseDto like(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeLikeService.like(id, userDetails.getUsername());
+    public StatusResponseDto recipeLike(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return recipeLikeService.recipeLike(id, userDetails.getUsername());
     }
 
 //    @DeleteMapping

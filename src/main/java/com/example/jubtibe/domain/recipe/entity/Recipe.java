@@ -51,11 +51,12 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<RecipeLike> recipeLikes = new ArrayList<>();
 
-    public Recipe(RecipeRequestDto requestDto) {
+    public Recipe(RecipeRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.content = requestDto.getContent();
         this.material = requestDto.getMaterial();
+        this.user = user;
     }
 
     public void update(RecipeRequestDto requestDto) {
