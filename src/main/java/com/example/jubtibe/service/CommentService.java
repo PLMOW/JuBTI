@@ -25,7 +25,11 @@ public class CommentService {
         User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
         commentRepository.save(new Comment(user,recipe,requestDto));
-        return StatusResponseDto.success(200,"작성 완료");
+//        return StatusResponseDto.success(200,"작성 완료");
+        return StatusResponseDto.builder()
+                .statusCode(200)
+                .msg("작성 완료")
+                .build();
     }
     @Transactional
     public StatusResponseDto<?> updateComments(Long commentsid, CommentRequestDto requestDto, String username) {
@@ -35,7 +39,6 @@ public class CommentService {
             new IllegalArgumentException("본인 댓글만 수정 가능");
         }
         comments.update(requestDto);
-
         return StatusResponseDto.builder()
                 .statusCode(200)
                 .msg("수정 완료")
@@ -50,6 +53,9 @@ public class CommentService {
             new IllegalArgumentException("본인 댓글만 삭제 가능");
         }
         commentRepository.deleteById(commentsId);
-        return StatusResponseDto.success(200,"삭제 완료");
+        return StatusResponseDto.builder()
+                .statusCode(200)
+                .msg("삭제 완료")
+                .build();
     }
 }
