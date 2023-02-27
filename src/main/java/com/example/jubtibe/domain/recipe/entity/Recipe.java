@@ -27,6 +27,7 @@ public class Recipe extends Timestamped {
     private String title;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserMbti mbti;
 
     @Column(nullable = false)
