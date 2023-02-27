@@ -33,7 +33,7 @@ public class RecipeService {
         recipeRepository.save(new Recipe(requestDto));
 
         return StatusResponseDto.builder()
-                .status(200)
+                .statusCode(200)
                 .msg("작성 완료")
                 .build();
     }
@@ -73,7 +73,7 @@ public class RecipeService {
                 .build();
 
         return StatusResponseDto.builder()
-                .status(200)
+                .statusCode(200)
                 .msg("수정 완료")
                 .build();
     }
@@ -96,7 +96,7 @@ public class RecipeService {
                 .build();
 
         return StatusResponseDto.builder()
-                .status(200)
+                .statusCode(200)
                 .msg("삭제 완료")
                 .build();
     }
