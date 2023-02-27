@@ -5,6 +5,7 @@ import com.example.jubtibe.domain.like.entity.RecipeLike;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserMbti;
+import com.example.jubtibe.entity.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Recipe {
+public class Recipe extends Timestamped {
     //    작성자 박성민
 
     @Id
@@ -34,12 +35,6 @@ public class Recipe {
 
     @Column(nullable = false)
     private String material;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime modifiedAt;
 
     @ManyToOne
     @JoinColumn(name = "userId")
