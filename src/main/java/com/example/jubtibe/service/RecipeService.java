@@ -57,6 +57,7 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public RecipeResponseDto getRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
+        List<Comment> comment = commentRepository.findByRecipe(recipe);
         int likes = recipeLikeRepository.countByRecipe(recipe);
         List<CommentResponseDto> commentresponse =new ArrayList<>();
         for (Comment res : comment) {
