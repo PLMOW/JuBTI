@@ -7,6 +7,7 @@ import com.example.jubtibe.security.UserDetailsImpl;
 import com.example.jubtibe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -22,7 +23,7 @@ public class RecipeController {
 
     @PostMapping("/recipe")
     public StatusResponseDto createRecipe(@Valid @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeService.createRecipe(requestDto, userDetails);
+        return recipeService.createRecipe(requestDto, userDetails.getUsername());
     }
 
     @GetMapping("/recipe")
@@ -37,12 +38,12 @@ public class RecipeController {
 
     @PutMapping("/recipe/{id}")
     public StatusResponseDto updateRecipe(@Valid @PathVariable Long id, @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeService.updateRecipe(id, requestDto, userDetails);
+        return recipeService.updateRecipe(id, requestDto, userDetails.getUsername());
     }
 
     @DeleteMapping("/recipe/{id}")
     public StatusResponseDto deleteRecipe(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeService.deleteRecipe(id, userDetails);
+        return recipeService.deleteRecipe(id, userDetails.getUsername());
     }
     
 }
