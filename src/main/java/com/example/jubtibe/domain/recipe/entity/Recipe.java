@@ -44,7 +44,7 @@ public class Recipe extends Timestamped {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeLike> likes = new ArrayList<>();
+    private List<RecipeLike> recipeLike = new ArrayList<>();
 
     public Recipe(RecipeRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
@@ -52,6 +52,7 @@ public class Recipe extends Timestamped {
         this.material = requestDto.getMaterial();
         this.content = requestDto.getContent();
         this.user = user;
+//        this.recipeLike = requestDto.getRecipeLike;
     }
 
     public void update(RecipeRequestDto requestDto) {

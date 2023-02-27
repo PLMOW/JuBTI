@@ -21,7 +21,7 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping("/recipe")
-    public StatusResponseDto createRecipe(@Valid @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public StatusResponseDto createRecipe(@RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return recipeService.createRecipe(requestDto, userDetails.getUsername());
     }
 
@@ -36,7 +36,7 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{id}")
-    public StatusResponseDto updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public StatusResponseDto updateRecipe(@PathVariable Long id, @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return recipeService.updateRecipe(id, requestDto, userDetails.getUsername());
     }
 

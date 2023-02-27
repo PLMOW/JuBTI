@@ -8,6 +8,7 @@ import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.repository.CommentRepository;
+import com.example.jubtibe.repository.RecipeLikeRepository;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
