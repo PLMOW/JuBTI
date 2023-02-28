@@ -42,8 +42,20 @@ public class RecipeService {
                 .msg("작성 완료")
                 .build();
     }
+
+    @Transactional(readOnly = true)
+    public List<RecipeSearchDto> getRecipes() {
+        List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
+        List<RecipeSearchDto> responseDtoList = new ArrayList<>();
+        for(Recipe recipe : recipeList){
+            responseDtoList.add(new RecipeSearchDto(recipe));
+        }
+        return responseDtoList;
+    }
+
     @Transactional(readOnly = true)
     public List<RecipeSearchDto> getRecipes(int a, int b){
+        if(a>=b) throw new CustomException(ErrorCode.INVALID_REQUEST); 
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for(Recipe recipe : recipeList){
@@ -52,14 +64,6 @@ public class RecipeService {
         List<RecipeSearchDto> answer = new ArrayList<>(responseDtoList.subList(a, b));
         return answer;
     }
-//    public List<RecipeSearchDto> getRecipes() {
-//        List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
-//        List<RecipeSearchDto> responseDtoList = new ArrayList<>();
-//        for(Recipe recipe : recipeList){
-//            responseDtoList.add(new RecipeSearchDto(recipe));
-//        }
-//        return responseDtoList;
-//    }
 
     @Transactional(readOnly = true)
     public RecipeResponseDto getRecipe(Long id) {
