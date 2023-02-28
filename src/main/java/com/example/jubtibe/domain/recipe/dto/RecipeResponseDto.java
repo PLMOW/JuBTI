@@ -15,6 +15,7 @@ public class RecipeResponseDto {
     //    작성자 박성민,권재현
     //    이미지파일 받아오기
     private Long id;
+    private String image;
     private String nickname;
     private String title;
     private String material;
@@ -25,8 +26,8 @@ public class RecipeResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-
     public RecipeResponseDto(Recipe recipe, List comments, Integer recipeLike) {
+        this.image=recipe.getImage();
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
