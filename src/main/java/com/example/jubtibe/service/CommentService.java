@@ -36,7 +36,7 @@ public class CommentService {
     @Transactional
     public StatusResponseDto<?> updateComments(Long commentsid, CommentRequestDto requestDto, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CLIENT));
-        Comment comments = commentRepository.findById(commentsid).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_RECIPE));
+        Comment comments = commentRepository.findById(commentsid).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_COMMENT));
         if(!comments.getUser().equals(user)){
             new IllegalArgumentException("본인 댓글만 수정 가능합니다.");
         }
@@ -51,7 +51,7 @@ public class CommentService {
     @Transactional
     public StatusResponseDto<?> deleteComments(Long commentsId,String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CLIENT));
-        Comment comments = commentRepository.findById(commentsId).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_RECIPE));
+        Comment comments = commentRepository.findById(commentsId).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_COMMENT));
         if(comments.getUser().getId()!=user.getId()){
             return StatusResponseDto.builder()
                     .statusCode(403)
