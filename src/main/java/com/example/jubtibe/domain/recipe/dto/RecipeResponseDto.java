@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class RecipeResponseDto {
-    //    작성자 박성민
+    //    작성자 박성민,권재현
     //    이미지파일 받아오기
     private Long id;
     private String image;
@@ -21,12 +21,12 @@ public class RecipeResponseDto {
     private String material;
     private String content;
     private UserMbti mbti;
-    private RecipeLike recipeLike;
+    private Integer recipeLike;
     private List comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public RecipeResponseDto(Recipe recipe, List comments) {
+    public RecipeResponseDto(Recipe recipe, List comments, Integer recipeLike) {
         this.image=recipe.getImage();
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
@@ -34,6 +34,7 @@ public class RecipeResponseDto {
         this.material = recipe.getMaterial();
         this.content = recipe.getContent();
         this.mbti = recipe.getMbti();
+        this.recipeLike = recipeLike;
         this.comments = comments;
         this.createdAt = recipe.getCreatedAt();
         this.modifiedAt = recipe.getModifiedAt();

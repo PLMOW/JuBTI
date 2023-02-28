@@ -17,7 +17,7 @@ public class RecipeSearchDto {
     private String nickname;
     private String title;
     private UserMbti mbti;
-    private RecipeLike recipeLike;
+    private Integer recipeLike;
 
     public RecipeSearchDto(Recipe recipe) {
         this.image= recipe.getImage();
@@ -25,5 +25,6 @@ public class RecipeSearchDto {
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
         this.mbti = recipe.getMbti();
+        this.recipeLike = getRecipeLike();
     }
 }

@@ -11,6 +11,7 @@ import com.example.jubtibe.domain.user.entity.UserRoleEnum;
 import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
+import com.example.jubtibe.repository.RecipeLikeRepository;
 import com.example.jubtibe.repository.CommentRepository;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
@@ -27,6 +28,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final RecipeLikeRepository recipeLikeRepository;
 
     @Transactional
     public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username) {
@@ -40,6 +42,7 @@ public class RecipeService {
                 .msg("작성 완료")
                 .build();
     }
+
     @Transactional(readOnly = true)
     public List<RecipeSearchDto> getRecipes() {
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
@@ -51,15 +54,28 @@ public class RecipeService {
     }
 
     @Transactional(readOnly = true)
+    public List<RecipeSearchDto> getRecipes(int a, int b){
+        if(a>=b) throw new CustomException(ErrorCode.INVALID_REQUEST); 
+        List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
+        List<RecipeSearchDto> responseDtoList = new ArrayList<>();
+        for(Recipe recipe : recipeList){
+            responseDtoList.add(new RecipeSearchDto(recipe));
+        }
+        List<RecipeSearchDto> answer = new ArrayList<>(responseDtoList.subList(a, b));
+        return answer;
+    }
+
+    @Transactional(readOnly = true)
     public RecipeResponseDto getRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         List<Comment> comment = commentRepository.findByRecipe(recipe);
-        List<CommentResponseDto> commentresponse =new ArrayList<>();
+        int likes = recipeLikeRepository.countByRecipe(recipe);
+        List<CommentResponseDto> commentResponse =new ArrayList<>();
         for (Comment res : comment) {
             CommentResponseDto commentResponseDto = new CommentResponseDto(res);
-            commentresponse.add(commentResponseDto);
+            commentResponse.add(commentResponseDto);
         }
-        return new RecipeResponseDto(recipe,commentresponse);
+        return new RecipeResponseDto(recipe,commentResponse,likes);
     }
 
     @Transactional
@@ -68,16 +84,12 @@ public class RecipeService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
         );
 
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipe.update(requestDto);
-        }else return StatusResponseDto.builder()
-                .statusCode(400)
-                .msg("수정 권한이 없습니다.")
-                .build();
-
+        }else new CustomException(ErrorCode.UNAUTHORIZED_USER);
         return StatusResponseDto.builder()
                 .statusCode(200)
                 .msg("수정 완료")
@@ -95,10 +107,7 @@ public class RecipeService {
 
         if (user.getRole().equals(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             recipeRepository.delete(recipe);
-        }else return StatusResponseDto.builder()
-                .statusCode(400)
-                .msg("삭제 권한이 없습니다.")
-                .build();
+        }else new CustomException(ErrorCode.UNAUTHORIZED_USER);
 
         return StatusResponseDto.builder()
                 .statusCode(200)
