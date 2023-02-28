@@ -2,6 +2,7 @@ package com.example.jubtibe.service;
 
 import com.example.jubtibe.domain.comment.dto.CommentResponseDto;
 import com.example.jubtibe.domain.comment.entity.Comment;
+import com.example.jubtibe.domain.like.entity.RecipeLike;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
@@ -45,10 +46,10 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeSearchDto> getRecipes() {
-        List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
+        List<Recipe> recipeList = recipeRepository.findAllByOrderByRecipeLikeDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for(Recipe recipe : recipeList){
-            responseDtoList.add(new RecipeSearchDto(recipe));
+            responseDtoList.add(new RecipeSearchDto(recipe, recipeLikeRepository.countByRecipe(recipe)));
         }
         return responseDtoList;
     }
@@ -56,10 +57,10 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeSearchDto> getRecipes(int a, int b) {
         if (a >= b) throw new CustomException(ErrorCode.INVALID_REQUEST);
-        List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
+        List<Recipe> recipeList = recipeRepository.findAllByOrderByRecipeLikeDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for (Recipe recipe : recipeList) {
-            responseDtoList.add(new RecipeSearchDto(recipe));
+            responseDtoList.add(new RecipeSearchDto(recipe, recipeLikeRepository.countByRecipe(recipe)));
         }
         List<RecipeSearchDto> answer = new ArrayList<>();
         for(int i=0; i<=b-a; i++){

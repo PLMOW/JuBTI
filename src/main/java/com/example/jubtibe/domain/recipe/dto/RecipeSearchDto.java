@@ -19,12 +19,12 @@ public class RecipeSearchDto {
     private UserMbti mbti;
     private Integer recipeLike;
 
-    public RecipeSearchDto(Recipe recipe) {
+    public RecipeSearchDto(Recipe recipe, Integer recipeLike) {
         this.image= recipe.getImage();
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
         this.mbti = recipe.getMbti();
-        this.recipeLike = getRecipeLike();
+        this.recipeLike = recipeLike;
     }
 }
