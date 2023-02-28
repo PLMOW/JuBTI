@@ -17,5 +17,5 @@ public class RecipeRequestDto {
     private UserMbti mbti;
     private String material;
     private String content;
-//    private List<RecipeRequestDto> recipeLike;
+    private Integer recipeLike;
 }
