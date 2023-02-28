@@ -54,14 +54,21 @@ public class RecipeService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecipeSearchDto> getRecipes(int a, int b){
-        if(a>=b) throw new CustomException(ErrorCode.INVALID_REQUEST); 
+    public List<RecipeSearchDto> getRecipes(int a, int b) {
+        if (a >= b) throw new CustomException(ErrorCode.INVALID_REQUEST);
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
-        for(Recipe recipe : recipeList){
+        for (Recipe recipe : recipeList) {
             responseDtoList.add(new RecipeSearchDto(recipe));
         }
-        List<RecipeSearchDto> answer = new ArrayList<>(responseDtoList.subList(a, b));
+        List<RecipeSearchDto> answer = new ArrayList<>();
+        for(int i=0; i<=b-a; i++){
+            if(responseDtoList.size()>b){
+                answer = new ArrayList<>(responseDtoList.subList(a-1, b));
+            }else if(responseDtoList.size()>a-1+i){
+                answer.add(responseDtoList.get(a - 1 + i));
+            }
+        }
         return answer;
     }
 
