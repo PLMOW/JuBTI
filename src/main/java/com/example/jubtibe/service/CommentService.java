@@ -52,13 +52,17 @@ public class CommentService {
     public StatusResponseDto<?> deleteComments(Long commentsId,String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CLIENT));
         Comment comments = commentRepository.findById(commentsId).orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_RECIPE));
-        if(!comments.getUser().equals(user)){
-            new IllegalArgumentException("본인 댓글만 삭제 가능합니다");
+        if(comments.getUser().getId()!=user.getId()){
+            return StatusResponseDto.builder()
+                    .statusCode(403)
+                    .msg("본인댓글만 수정가능합니다.")
+                    .build();
+        }else {
+            commentRepository.deleteById(commentsId);
+            return StatusResponseDto.builder()
+                    .statusCode(200)
+                    .msg("삭제 완료")
+                    .build();
         }
-        commentRepository.deleteById(commentsId);
-        return StatusResponseDto.builder()
-                .statusCode(200)
-                .msg("삭제 완료")
-                .build();
     }
 }
