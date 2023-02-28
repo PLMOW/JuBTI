@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/api")
@@ -28,6 +27,11 @@ public class RecipeController {
     @GetMapping("/recipe")
     public List<RecipeSearchDto> getRecipes(){
         return recipeService.getRecipes();
+    }
+
+    @GetMapping("/recipe/{a}/{b}")
+    public List<RecipeSearchDto> getRecipes(@PathVariable int a, @PathVariable int b){
+        return recipeService.getRecipes(a, b);
     }
 
     @GetMapping("/recipe/{id}")
