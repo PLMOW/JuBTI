@@ -13,12 +13,14 @@ public class RecipeSearchDto {
     //    작성자 박성민
     //    이미지파일 받아오기
     private Long id;
+    private String image;
     private String nickname;
     private String title;
     private UserMbti mbti;
     private Integer recipeLike;
 
     public RecipeSearchDto(Recipe recipe, Integer recipeLike) {
+        this.image= recipe.getImage();
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
