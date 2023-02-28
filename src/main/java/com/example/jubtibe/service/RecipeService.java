@@ -21,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
@@ -45,26 +43,35 @@ public class RecipeService {
                 .build();
     }
     @Transactional(readOnly = true)
-    public List<RecipeSearchDto> getRecipes() {
+    public List<RecipeSearchDto> getRecipes(int a, int b){
         List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for(Recipe recipe : recipeList){
             responseDtoList.add(new RecipeSearchDto(recipe));
         }
-        return responseDtoList;
+        List<RecipeSearchDto> answer = new ArrayList<>(responseDtoList.subList(a, b));
+        return answer;
     }
+//    public List<RecipeSearchDto> getRecipes() {
+//        List<Recipe> recipeList = recipeRepository.findAllByOrderByCreatedAtDesc();
+//        List<RecipeSearchDto> responseDtoList = new ArrayList<>();
+//        for(Recipe recipe : recipeList){
+//            responseDtoList.add(new RecipeSearchDto(recipe));
+//        }
+//        return responseDtoList;
+//    }
 
     @Transactional(readOnly = true)
     public RecipeResponseDto getRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         List<Comment> comment = commentRepository.findByRecipe(recipe);
         int likes = recipeLikeRepository.countByRecipe(recipe);
-        List<CommentResponseDto> commentresponse =new ArrayList<>();
+        List<CommentResponseDto> commentResponse =new ArrayList<>();
         for (Comment res : comment) {
             CommentResponseDto commentResponseDto = new CommentResponseDto(res);
-            commentresponse.add(commentResponseDto);
+            commentResponse.add(commentResponseDto);
         }
-        return new RecipeResponseDto(recipe,commentresponse,likes);
+        return new RecipeResponseDto(recipe,commentResponse,likes);
     }
 
     @Transactional
