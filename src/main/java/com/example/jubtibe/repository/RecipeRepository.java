@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RecipeRepository extends JpaRepository <Recipe, Long> {
     // 작성자 박성민
-    List<Recipe> findAllByOrderByCreatedAtDesc();
+    List<Recipe> findAllByOrderByRecipeLikeDesc();
 }
