@@ -6,6 +6,9 @@ import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
 import com.example.jubtibe.security.UserDetailsImpl;
 import com.example.jubtibe.service.RecipeService;
 import com.example.jubtibe.dto.StatusResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,6 +32,10 @@ public class RecipeController {
         return recipeService.getRecipes();
     }
 
+    @Parameters({
+            @Parameter(name = "a", description = "처음 불러올 숫자", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "b", description = "마지막으로 불러올 숫자", in = ParameterIn.PATH, required = true)
+    })
     @GetMapping("/recipe/{a}/{b}")
     public List<RecipeSearchDto> getRecipes(@PathVariable int a, @PathVariable int b){
         return recipeService.getRecipes(a, b);
