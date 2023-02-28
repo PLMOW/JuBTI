@@ -43,7 +43,7 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/post/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
@@ -58,7 +58,6 @@ public class WebSecurityConfig {
 
         // 403 Error 처리, 인증과는 별개로 추가적인 권한이 충족되지 않는 경우
 //        http.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
-
 
         return http.build();
     }
