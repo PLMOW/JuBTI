@@ -23,6 +23,8 @@ public class Recipe extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length=1000,nullable = false)
+    private String image;
 
     @Column(nullable = false)
     private String title;
@@ -47,6 +49,7 @@ public class Recipe extends Timestamped {
     private List<RecipeLike> recipeLikes = new ArrayList<>();
 
     public Recipe(RecipeRequestDto requestDto, User user) {
+        this.image = requestDto.getImage();
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.content = requestDto.getContent();
@@ -55,6 +58,7 @@ public class Recipe extends Timestamped {
     }
 
     public void update(RecipeRequestDto requestDto) {
+        this.image = requestDto.getImage();
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.content = requestDto.getContent();
