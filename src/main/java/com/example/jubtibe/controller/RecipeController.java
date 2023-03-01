@@ -49,8 +49,8 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/{id}")
-    public RecipeResponseDto getRecipe(@PathVariable Long id){
-        return recipeService.getRecipe(id);
+    public RecipeResponseDto getRecipe(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return recipeService.getRecipe(id, userDetails.getUsername());
     }
 
     @PutMapping("/recipe/{id}")

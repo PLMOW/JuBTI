@@ -22,11 +22,12 @@ public class RecipeResponseDto {
     private String content;
     private UserMbti mbti;
     private Integer recipeLike;
+    private int hasLike;
     private List comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public RecipeResponseDto(Recipe recipe, List comments, Integer recipeLike) {
+    public RecipeResponseDto(Recipe recipe, List comments, Integer recipeLike, int hasLike) {
         this.image=recipe.getImage();
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
@@ -35,6 +36,7 @@ public class RecipeResponseDto {
         this.content = recipe.getContent();
         this.mbti = recipe.getMbti();
         this.recipeLike = recipeLike;
+        this.hasLike = hasLike;
         this.comments = comments;
         this.createdAt = recipe.getCreatedAt();
         this.modifiedAt = recipe.getModifiedAt();
