@@ -2,6 +2,7 @@ package com.example.jubtibe.service;
 
 import com.example.jubtibe.domain.comment.dto.CommentResponseDto;
 import com.example.jubtibe.domain.comment.entity.Comment;
+import com.example.jubtibe.domain.like.entity.RecipeLike;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
@@ -80,8 +81,13 @@ public class RecipeService {
     }
 
     @Transactional(readOnly = true)
-    public RecipeResponseDto getRecipe(Long id) {
+    public RecipeResponseDto getRecipe(Long id, String username) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
+
+        int hasLike = 0;
+        if(recipeLikeRepository.findByUser(user).isPresent()) hasLike = 1;
+
         List<Comment> comment = commentRepository.findByRecipe(recipe);
         int likes = recipeLikeRepository.countByRecipe(recipe);
         List<CommentResponseDto> commentResponse =new ArrayList<>();
@@ -89,7 +95,7 @@ public class RecipeService {
             CommentResponseDto commentResponseDto = new CommentResponseDto(res);
             commentResponse.add(commentResponseDto);
         }
-        return new RecipeResponseDto(recipe,commentResponse,likes);
+        return new RecipeResponseDto(recipe,commentResponse,likes, hasLike);
     }
 
     @Transactional
