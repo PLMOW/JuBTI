@@ -2,7 +2,6 @@ package com.example.jubtibe.service;
 
 import com.example.jubtibe.domain.comment.dto.CommentResponseDto;
 import com.example.jubtibe.domain.comment.entity.Comment;
-import com.example.jubtibe.domain.like.entity.RecipeLike;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;

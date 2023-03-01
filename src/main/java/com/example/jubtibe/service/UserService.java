@@ -5,6 +5,7 @@ import com.example.jubtibe.domain.user.dto.SignUpRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserMbti;
 import com.example.jubtibe.domain.user.entity.UserRoleEnum;
+import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.jwt.JwtUtil;
@@ -55,7 +56,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response){
+    public StatusResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response){
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -65,6 +66,13 @@ public class UserService {
             throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+        StatusResponseDto<UserMbti>login = new StatusResponseDto<>("success",user.getUserMbti(),200);
+        return new StatusResponseDto<>("success",user.getUserMbti(),200);
+        //        return login.builder()
+//                .msg("success")
+//                .data(user.getUserMbti())
+//                .statusCode(200)
+//                .build();
     }
 
 }

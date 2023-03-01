@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Getter
 public class StatusResponseDto<T> {
@@ -17,6 +16,11 @@ public class StatusResponseDto<T> {
 
     public StatusResponseDto(String msg, int statusCode){
         this.msg = msg;
+        this.statusCode = statusCode;
+    }
+    public StatusResponseDto(String msg,T t, int statusCode){
+        this.msg = msg;
+        this.data=t;
         this.statusCode = statusCode;
     }
 
