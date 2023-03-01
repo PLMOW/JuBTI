@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/api")
@@ -23,8 +25,13 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping("/recipe")
-    public StatusResponseDto createRecipe(@RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeService.createRecipe(requestDto, userDetails.getUsername());
+    public StatusResponseDto createRecipe(
+            @RequestPart(value = "data") RecipeRequestDto requestDto,
+//            @RequestPart(value = "image") List<MultipartFile> pictures
+            @RequestPart(value = "image") MultipartFile image,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    )throws IOException {
+        return recipeService.createRecipe(requestDto, userDetails.getUsername(),image);
     }
 
     @GetMapping("/recipe")
@@ -47,8 +54,12 @@ public class RecipeController {
     }
 
     @PutMapping("/recipe/{id}")
-    public StatusResponseDto updateRecipe(@PathVariable Long id, @RequestBody RecipeRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return recipeService.updateRecipe(id, requestDto, userDetails.getUsername());
+    public StatusResponseDto updateRecipe(@PathVariable Long id,
+                                          @RequestPart(value = "data") RecipeRequestDto requestDto,
+//            @RequestPart(value = "image") List<MultipartFile> pictures
+                                          @RequestPart(value = "image") MultipartFile image,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails)throws IOException{
+        return recipeService.updateRecipe(id, requestDto, userDetails.getUsername(),image);
     }
 
     @DeleteMapping("/recipe/{id}")

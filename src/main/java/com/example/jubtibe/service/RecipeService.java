@@ -16,8 +16,12 @@ import com.example.jubtibe.repository.CommentRepository;
 import com.example.jubtibe.repository.RecipeRepository;
 import com.example.jubtibe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +33,16 @@ public class RecipeService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
+    @Autowired
+    private UploadService uploadService;
 
     @Transactional
-    public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username) {
+    public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username, MultipartFile image)throws IOException {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
-        recipeRepository.save(new Recipe(requestDto, user));
+        String storedFileName = uploadService.upload(image, "images");
+        recipeRepository.save(new Recipe(requestDto, user,storedFileName));
 
         return StatusResponseDto.builder()
                 .statusCode(200)
@@ -86,16 +93,17 @@ public class RecipeService {
     }
 
     @Transactional
-    public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username) {
+    public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username,MultipartFile image)throws IOException {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
         );
-
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
-            recipe.update(requestDto);
+            String storedFileName = uploadService.upload(image, "images");
+            recipeRepository.save(new Recipe(requestDto, user,storedFileName));
+            recipe.update(requestDto,storedFileName);
         }else new CustomException(ErrorCode.UNAUTHORIZED_USER);
         return StatusResponseDto.builder()
                 .statusCode(200)
