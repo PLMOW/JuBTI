@@ -2,6 +2,8 @@ package com.example.jubtibe.controller;
 
 import com.example.jubtibe.domain.user.dto.LoginRequestDto;
 import com.example.jubtibe.domain.user.dto.SignUpRequestDto;
+import com.example.jubtibe.domain.user.entity.UserMbti;
+import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,8 +41,7 @@ public class UserController {
     @Tag(name = "for Auth check")
     @Operation(summary = "로그인", description = "로그인 시 db확인합니다.")
     @PostMapping("/login")//로그인
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response){
-        userService.login(requestDto,response);
-        return ResponseEntity.status(HttpStatus.OK).body("success");
+    public StatusResponseDto login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response){
+        return userService.login(requestDto,response);
     }
 }
