@@ -31,7 +31,7 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    runtimeOnly 'com.h2database:h2'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 }
 
