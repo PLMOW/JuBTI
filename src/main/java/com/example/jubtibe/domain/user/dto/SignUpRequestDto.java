@@ -19,7 +19,7 @@ public class SignUpRequestDto {
     private String nickname;
 
     @Schema(description = "특수문자, 대,소문자가 들어간 알파벳을 조합한 8~15자의 비밀번호만 허용됨", required = true)
-    @Pattern(regexp = "[\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-_+<>@\\#$%&\\\\\\=\\(\\'\\\"A-Za-z0-9]{8,15}",message = "대소문자와 숫자만 가능합니다")
+    @Pattern(regexp = "[!@#$%^&*A-Za-z0-9]{8,15}",message = "대소문자와 숫자만 가능합니다")
     private String password;
     @Schema(description = "가입할 유저의 MBTI 확인", example = "INFP", required = true)
     @Enumerated(value = EnumType.STRING)
