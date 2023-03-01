@@ -10,6 +10,7 @@ import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.jwt.JwtUtil;
 import com.example.jubtibe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,8 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    @Value("${admin.token}")
+    private String ADMIN_TOKEN;
 
     @Transactional
     public void signUp(SignUpRequestDto signUpRequestDto){
