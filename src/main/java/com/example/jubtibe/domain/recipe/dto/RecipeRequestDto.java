@@ -11,7 +11,7 @@ import java.util.List;
 public class RecipeRequestDto {
     //    작성자 박성민
     //    이미지 파일 받아오기
-    private String image;
+//    private String image;
     private String title;
     @Enumerated(value = EnumType.STRING)
     private UserMbti mbti;
