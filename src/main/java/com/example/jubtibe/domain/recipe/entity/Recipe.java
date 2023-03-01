@@ -48,18 +48,17 @@ public class Recipe extends Timestamped {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeLike> recipeLike = new ArrayList<>();
 
-    public Recipe(RecipeRequestDto requestDto, User user) {
-        this.image = requestDto.getImage();
+    public Recipe(RecipeRequestDto requestDto, User user,String image) {
+        this.image = image;
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.material = requestDto.getMaterial();
         this.content = requestDto.getContent();
         this.user = user;
-//        this.recipeLike = requestDto.getRecipeLike;
     }
 
-    public void update(RecipeRequestDto requestDto) {
-        this.image = requestDto.getImage();
+    public void update(RecipeRequestDto requestDto,String image) {//이미지 수정 안되는 상태임! 수정할것!
+        this.image = image;
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.material = requestDto.getMaterial();
