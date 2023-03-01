@@ -1,6 +1,6 @@
 package com.example.jubtibe.domain.recipe.dto;
 
-import com.example.jubtibe.domain.like.entity.RecipeLike;
+import com.example.jubtibe.domain.like.image.entity.Images;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.UserMbti;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class RecipeResponseDto {
     //    작성자 박성민,권재현
     //    이미지파일 받아오기
     private Long id;
-    private String image;
+    private List image;
     private String nickname;
     private String title;
     private String material;
@@ -27,8 +27,8 @@ public class RecipeResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public RecipeResponseDto(Recipe recipe, List comments, Integer recipeLike, int hasLike) {
-        this.image=recipe.getImage();
+    public RecipeResponseDto(Recipe recipe, List comments, Integer recipeLike, int hasLike,List image) {
+        this.image=image;
         this.id = recipe.getId();
         this.nickname = recipe.getUser().getNickname();
         this.title = recipe.getTitle();
