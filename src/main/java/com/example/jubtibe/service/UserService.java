@@ -5,13 +5,20 @@ import com.example.jubtibe.domain.user.dto.SignUpRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserMbti;
 import com.example.jubtibe.domain.user.entity.UserRoleEnum;
+import com.example.jubtibe.dto.AccessTokenResponseDto;
 import com.example.jubtibe.dto.StatusResponseDto;
+import com.example.jubtibe.entity.RefreshToken;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
 import com.example.jubtibe.jwt.JwtUtil;
+import com.example.jubtibe.repository.RefreshTokenRepository;
 import com.example.jubtibe.repository.UserRepository;
+import com.example.jubtibe.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +35,8 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${admin.token}")
     private String ADMIN_TOKEN;
@@ -55,7 +64,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public StatusResponseDto<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response){
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
@@ -65,14 +74,33 @@ public class UserService {
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+
+        Optional<RefreshToken> found = refreshTokenRepository.findById(user.getId());
+
+        if (found.isPresent()) refreshTokenRepository.deleteByUser(user);
+
+        AccessTokenResponseDto token = jwtUtil.createToken(user.getUsername(), user.getRole());
+
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, token.getRefreshToken());
+
         StatusResponseDto<UserMbti>login = new StatusResponseDto<>("success",user.getUserMbti(),200);
+
         return new StatusResponseDto<>("success",user.getUserMbti(),200);
         //        return login.builder()
 //                .msg("success")
 //                .data(user.getUserMbti())
 //                .statusCode(200)
 //                .build();
-    }
+        }
+
+        @Transactional(readOnly = true)
+        public User findUserByAuthentication(){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
+                return null;
+            }
+            return ((UserDetailsImpl) authentication.getPrincipal()).getUser();
+        }
 
 }
