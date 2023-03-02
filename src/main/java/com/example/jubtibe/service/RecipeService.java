@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -36,15 +37,20 @@ public class RecipeService {
     @Autowired
     private UploadService uploadService;
 
+    private long fileSizeLimit = 10*1024*1024;//10메가바이트/킬로바이트/바이트
+
     @Transactional
     public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username, List<MultipartFile> images)throws IOException {
         if(images.size()>5){throw new IllegalArgumentException("사진을 5장 이하로 넣어주세요");}
+        fileSizeCheck(images);
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
         Recipe recipe =new Recipe(requestDto, user);
         recipeRepository.save(recipe);
         for (MultipartFile image : images) {
+            if(fileCheck(image))
+            {throw new IllegalArgumentException("확장자를 확인해주세요");}
             String storedFileName = uploadService.upload(image, "images");
             imageRepository.save(new Images(storedFileName,recipe));
         }
@@ -118,12 +124,15 @@ public class RecipeService {
     @Transactional
     public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username,List<MultipartFile> images)throws IOException {
         if(images.size()>5){throw new IllegalArgumentException("사진을 5장 이하로 넣어주세요");}
+        fileSizeCheck(images);
         User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
             imageRepository.deleteByRecipe(recipe);
             recipe.update(requestDto);
             for (MultipartFile image : images) {
+                if(fileCheck(image))
+                {throw new IllegalArgumentException("확장자를 확인해주세요");}
                 String storedFileName = uploadService.upload(image, "images");
                 imageRepository.save(new Images(storedFileName,recipe));
             }
@@ -151,5 +160,21 @@ public class RecipeService {
                 .statusCode(200)
                 .msg("삭제 완료")
                 .build();
+    }
+    private boolean fileCheck(MultipartFile file){
+        String fileName = StringUtils.getFilenameExtension(file.getOriginalFilename());//getFilename은 전체이름을 통째로 가져옴
+        String exe = fileName.toLowerCase();
+        if(exe.equals("jpg")||exe.equals("png")||exe.equals("jpeg")||exe.equals("webp"))
+        {return false;}
+        return true;
+    }
+
+    private void fileSizeCheck(List<MultipartFile> images){
+        long fileSize = 0l;
+        for (MultipartFile image : images) {
+            fileSize+=image.getSize();
+        }
+        if(fileSize>fileSizeLimit){
+            throw new IllegalArgumentException("총 용량 10MB이하만 업로드 가능합니다");}
     }
 }
