@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -45,6 +46,8 @@ public class RecipeService {
         Recipe recipe =new Recipe(requestDto, user);
         recipeRepository.save(recipe);
         for (MultipartFile image : images) {
+            if(fileCheck(image))
+            {throw new IllegalArgumentException("확장자를 확인해주세요");}
             String storedFileName = uploadService.upload(image, "images");
             imageRepository.save(new Images(storedFileName,recipe));
         }
@@ -124,6 +127,8 @@ public class RecipeService {
             imageRepository.deleteByRecipe(recipe);
             recipe.update(requestDto);
             for (MultipartFile image : images) {
+                if(fileCheck(image))
+                {throw new IllegalArgumentException("확장자를 확인해주세요");}
                 String storedFileName = uploadService.upload(image, "images");
                 imageRepository.save(new Images(storedFileName,recipe));
             }
@@ -152,4 +157,12 @@ public class RecipeService {
                 .msg("삭제 완료")
                 .build();
     }
+    private boolean fileCheck(MultipartFile file){
+        String fileName = StringUtils.getFilenameExtension(file.getOriginalFilename());//getFilename은 전체이름을 통째로 가져옴
+        String exe = fileName.toLowerCase();
+        if(exe.equals("jpg")||exe.equals("png")||exe.equals("jpeg")||exe.equals("webp"))
+        {return false;}
+        return true;
+    }
+
 }
