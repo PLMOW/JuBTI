@@ -105,7 +105,7 @@ public class RecipeService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
 
         int hasLike = 0;
-        if(recipeLikeRepository.findByUser(user).isPresent()) hasLike = 1;
+        if(recipeLikeRepository.findByUserAndRecipe(user,recipe).isPresent()) hasLike = 1;
         List<Images> imagesList = imageRepository.findByRecipe(recipe);
         List<ImageResponse> image = new ArrayList<>();
         for (Images images : imagesList) {
