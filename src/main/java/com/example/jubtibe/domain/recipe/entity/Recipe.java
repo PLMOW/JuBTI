@@ -2,6 +2,7 @@ package com.example.jubtibe.domain.recipe.entity;
 
 import com.example.jubtibe.domain.comment.entity.Comment;
 import com.example.jubtibe.domain.like.entity.RecipeLike;
+import com.example.jubtibe.domain.like.image.entity.Images;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserMbti;
@@ -22,8 +23,11 @@ public class Recipe extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length=1000,nullable = false)
-    private String image;
+    //    @Column(length=1000,nullable = false)
+//    @Embedded
+//    private Images images;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Images> images = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
@@ -48,8 +52,8 @@ public class Recipe extends Timestamped {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeLike> recipeLike = new ArrayList<>();
 
-    public Recipe(RecipeRequestDto requestDto, User user,String image) {
-        this.image = image;
+    public Recipe(RecipeRequestDto requestDto, User user) {
+//        this.images = image;
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.material = requestDto.getMaterial();
@@ -57,8 +61,8 @@ public class Recipe extends Timestamped {
         this.user = user;
     }
 
-    public void update(RecipeRequestDto requestDto,String image) {//이미지 수정 안되는 상태임! 수정할것!
-        this.image = image;
+    public void update(RecipeRequestDto requestDto) {
+//        this.images = image;
         this.title = requestDto.getTitle();
         this.mbti = requestDto.getMbti();
         this.material = requestDto.getMaterial();

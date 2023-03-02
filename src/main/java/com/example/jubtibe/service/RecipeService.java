@@ -2,24 +2,23 @@ package com.example.jubtibe.service;
 
 import com.example.jubtibe.domain.comment.dto.CommentResponseDto;
 import com.example.jubtibe.domain.comment.entity.Comment;
-import com.example.jubtibe.domain.like.entity.RecipeLike;
+import com.example.jubtibe.domain.like.image.dto.ImageResponse;
 import com.example.jubtibe.domain.recipe.dto.RecipeRequestDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeResponseDto;
 import com.example.jubtibe.domain.recipe.dto.RecipeSearchDto;
+import com.example.jubtibe.domain.like.image.entity.Images;
 import com.example.jubtibe.domain.recipe.entity.Recipe;
 import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserRoleEnum;
 import com.example.jubtibe.dto.StatusResponseDto;
 import com.example.jubtibe.exception.CustomException;
 import com.example.jubtibe.exception.ErrorCode;
-import com.example.jubtibe.repository.RecipeLikeRepository;
-import com.example.jubtibe.repository.CommentRepository;
-import com.example.jubtibe.repository.RecipeRepository;
-import com.example.jubtibe.repository.UserRepository;
+import com.example.jubtibe.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,17 +33,27 @@ public class RecipeService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
+    private final ImageRepository imageRepository;
     @Autowired
     private UploadService uploadService;
 
+    private long fileSizeLimit = 10*1024*1024;//10메가바이트/킬로바이트/바이트
+
     @Transactional
-    public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username, MultipartFile image)throws IOException {
+    public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username, List<MultipartFile> images)throws IOException {
+        if(images.size()>5){throw new IllegalArgumentException("사진을 5장 이하로 넣어주세요");}
+        fileSizeCheck(images);
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
-        String storedFileName = uploadService.upload(image, "images");
-        recipeRepository.save(new Recipe(requestDto, user,storedFileName));
-
+        Recipe recipe =new Recipe(requestDto, user);
+        recipeRepository.save(recipe);
+        for (MultipartFile image : images) {
+            if(fileCheck(image))
+            {throw new IllegalArgumentException("확장자를 확인해주세요");}
+            String storedFileName = uploadService.upload(image, "images");
+            imageRepository.save(new Images(storedFileName,recipe));
+        }
         return StatusResponseDto.builder()
                 .statusCode(200)
                 .msg("작성 완료")
@@ -56,7 +65,12 @@ public class RecipeService {
         List<Recipe> recipeList = recipeRepository.findAllByOrderByRecipeLikeDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for(Recipe recipe : recipeList){
-            responseDtoList.add(new RecipeSearchDto(recipe, recipeLikeRepository.countByRecipe(recipe)));
+            List<Images> imagesList = imageRepository.findByRecipe(recipe);
+            List<ImageResponse> image = new ArrayList<>();
+            for (Images images : imagesList) {
+                image.add(new ImageResponse(images));
+            }
+            responseDtoList.add(new RecipeSearchDto(recipe, recipeLikeRepository.countByRecipe(recipe),image));
         }
         return responseDtoList;
     }
@@ -67,7 +81,12 @@ public class RecipeService {
         List<Recipe> recipeList = recipeRepository.findAllByOrderByRecipeLikeDesc();
         List<RecipeSearchDto> responseDtoList = new ArrayList<>();
         for (Recipe recipe : recipeList) {
-            responseDtoList.add(new RecipeSearchDto(recipe, recipeLikeRepository.countByRecipe(recipe)));
+            List<Images> imagesList = imageRepository.findByRecipe(recipe);
+            List<ImageResponse> image = new ArrayList<>();
+            for (Images images : imagesList) {
+                image.add(new ImageResponse(images));
+            }
+            responseDtoList.add(new RecipeSearchDto(recipe, recipeLikeRepository.countByRecipe(recipe),image));
         }
         List<RecipeSearchDto> answer = new ArrayList<>();
         for(int i=0; i<=b-a; i++){
@@ -86,8 +105,12 @@ public class RecipeService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
 
         int hasLike = 0;
-        if(recipeLikeRepository.findByUserAndRecipe(user, recipe).isPresent()) hasLike = 1;
-
+        if(recipeLikeRepository.findByUser(user).isPresent()) hasLike = 1;
+        List<Images> imagesList = imageRepository.findByRecipe(recipe);
+        List<ImageResponse> image = new ArrayList<>();
+        for (Images images : imagesList) {
+            image.add(new ImageResponse(images));
+        }
         List<Comment> comment = commentRepository.findByRecipe(recipe);
         int likes = recipeLikeRepository.countByRecipe(recipe);
         List<CommentResponseDto> commentResponse =new ArrayList<>();
@@ -95,21 +118,24 @@ public class RecipeService {
             CommentResponseDto commentResponseDto = new CommentResponseDto(res);
             commentResponse.add(commentResponseDto);
         }
-        return new RecipeResponseDto(recipe,commentResponse,likes, hasLike);
+        return new RecipeResponseDto(recipe,commentResponse,likes, hasLike,image);
     }
 
     @Transactional
-    public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username,MultipartFile image)throws IOException {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
-        );
-        Recipe recipe = recipeRepository.findById(id).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_RECIPE)
-        );
+    public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username,List<MultipartFile> images)throws IOException {
+        if(images.size()>5){throw new IllegalArgumentException("사진을 5장 이하로 넣어주세요");}
+        fileSizeCheck(images);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
-            String storedFileName = uploadService.upload(image, "images");
-            recipeRepository.save(new Recipe(requestDto, user,storedFileName));
-            recipe.update(requestDto,storedFileName);
+            imageRepository.deleteByRecipe(recipe);
+            recipe.update(requestDto);
+            for (MultipartFile image : images) {
+                if(fileCheck(image))
+                {throw new IllegalArgumentException("확장자를 확인해주세요");}
+                String storedFileName = uploadService.upload(image, "images");
+                imageRepository.save(new Images(storedFileName,recipe));
+            }
         }else new CustomException(ErrorCode.UNAUTHORIZED_USER);
         return StatusResponseDto.builder()
                 .statusCode(200)
@@ -134,5 +160,21 @@ public class RecipeService {
                 .statusCode(200)
                 .msg("삭제 완료")
                 .build();
+    }
+    private boolean fileCheck(MultipartFile file){
+        String fileName = StringUtils.getFilenameExtension(file.getOriginalFilename());//getFilename은 전체이름을 통째로 가져옴
+        String exe = fileName.toLowerCase();
+        if(exe.equals("jpg")||exe.equals("png")||exe.equals("jpeg")||exe.equals("webp"))
+        {return false;}
+        return true;
+    }
+
+    private void fileSizeCheck(List<MultipartFile> images){
+        long fileSize = 0l;
+        for (MultipartFile image : images) {
+            fileSize+=image.getSize();
+        }
+        if(fileSize>fileSizeLimit){
+            throw new IllegalArgumentException("총 용량 10MB이하만 업로드 가능합니다");}
     }
 }
