@@ -30,7 +30,7 @@ public class RecipeLikeService {
                 () -> new IllegalArgumentException("레시피를 찾을 수 없습니다.")
         );
         if (!recipeLikeRepository.findByUser(user).isEmpty()){
-            recipeLikeRepository.deleteByUser(user);
+            recipeLikeRepository.deleteByRecipe(recipe);
             return StatusResponseDto.builder()
                     .statusCode(200)
                     .msg("좋아요 취소")
