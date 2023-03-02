@@ -27,8 +27,8 @@ public class RecipeController {
     @PostMapping("/recipe")
     public StatusResponseDto createRecipe(
             @RequestPart(value = "data") RecipeRequestDto requestDto,
-//            @RequestPart(value = "image") List<MultipartFile> pictures
-            @RequestPart(value = "image") MultipartFile image,
+            @RequestPart(value = "image") List<MultipartFile> image,
+//            @RequestPart(value = "image") MultipartFile image,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     )throws IOException {
         return recipeService.createRecipe(requestDto, userDetails.getUsername(),image);
@@ -56,8 +56,8 @@ public class RecipeController {
     @PutMapping("/recipe/{id}")
     public StatusResponseDto updateRecipe(@PathVariable Long id,
                                           @RequestPart(value = "data") RecipeRequestDto requestDto,
-//            @RequestPart(value = "image") List<MultipartFile> pictures
-                                          @RequestPart(value = "image") MultipartFile image,
+                                          @RequestPart(value = "image") List<MultipartFile> image,
+//                                          @RequestPart(value = "image") MultipartFile image,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails)throws IOException{
         return recipeService.updateRecipe(id, requestDto, userDetails.getUsername(),image);
     }
