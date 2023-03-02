@@ -1,6 +1,13 @@
 package com.example.jubtibe.jwt;
 
+import com.example.jubtibe.domain.user.entity.User;
 import com.example.jubtibe.domain.user.entity.UserRoleEnum;
+import com.example.jubtibe.dto.AccessTokenResponseDto;
+import com.example.jubtibe.entity.RefreshToken;
+import com.example.jubtibe.exception.CustomException;
+import com.example.jubtibe.exception.ErrorCode;
+import com.example.jubtibe.repository.RefreshTokenRepository;
+import com.example.jubtibe.repository.UserRepository;
 import com.example.jubtibe.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -24,11 +31,18 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L * 48;
+    private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L * 24 * 2;
+    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24 * 14;
 
     private final UserDetailsServiceImpl userDetailsService;
+
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    private final UserRepository userRepository;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -50,18 +64,59 @@ public class JwtUtil {
         return null;
     }
 
-    // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
-        Date date = new Date();
+    public String resolveRefreshToken(HttpServletRequest request){
+        String bearerToken = request.getHeader(REFRESH_TOKEN_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.split(" ")[1];
+        }
+        return null;
+    }
 
+    // 토큰 생성
+    public AccessTokenResponseDto createToken(String username, UserRoleEnum role) {
+        String accessToken = createAccessToken(username, role);
+        String refreshToken = createRefreshToken(username,role);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+        RefreshToken refreshTokenObj = RefreshToken.builder()
+                .user(user)
+                .value(refreshToken)
+                .build();
+
+        refreshTokenRepository.save(refreshTokenObj);
+
+        return AccessTokenResponseDto.builder()
+                .accessToken(accessToken)
+                .accessTokenExpireTime(new Date(System.currentTimeMillis()+ACCESS_TOKEN_TIME))
+                .refreshToken(refreshToken)
+                .refreshTokenExpireTime(new Date(System.currentTimeMillis()+REFRESH_TOKEN_TIME))
+                .build();
+    }
+
+    public String createAccessToken(String username, UserRoleEnum role){
+        Date date = new Date();
         return BEARER_PREFIX +
-                Jwts.builder() // auth claim 지금 필요 없음
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
-                        .setIssuedAt(date)
+                Jwts.builder()
+                        .setSubject(username) // 토큰 제목
+                        .claim(AUTHORIZATION_KEY, role) // 회원 아이디, 회원 등급
+                        .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME)) // 토큰 만료 시간
+                        .setIssuedAt(date) // 토큰 발급 시간
                         .signWith(key, signatureAlgorithm)
                         .compact();
+    }
+
+    public String createRefreshToken(String username, UserRoleEnum role){
+        Date date = new Date();
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key,signatureAlgorithm)
+                        .compact();
+
     }
 
     // 토큰 검증
@@ -89,5 +144,13 @@ public class JwtUtil {
     public Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
+
+    public Date createAccessTokenExpireTime(){
+        return new Date(System.currentTimeMillis() + ACCESS_TOKEN_TIME);
+    }
+
+    public Date createRefreshTokenExpireTime(){
+        return new Date(System.currentTimeMillis()+REFRESH_TOKEN_TIME);
     }
 }
