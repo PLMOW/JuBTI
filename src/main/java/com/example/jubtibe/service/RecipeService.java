@@ -37,9 +37,12 @@ public class RecipeService {
     @Autowired
     private UploadService uploadService;
 
+    private long fileSizeLimit = 10*1024*1024;//10메가바이트/킬로바이트/바이트
+
     @Transactional
     public StatusResponseDto createRecipe(RecipeRequestDto requestDto, String username, List<MultipartFile> images)throws IOException {
         if(images.size()>5){throw new IllegalArgumentException("사진을 5장 이하로 넣어주세요");}
+        fileSizeCheck(images);
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_CLIENT)
         );
@@ -121,6 +124,7 @@ public class RecipeService {
     @Transactional
     public StatusResponseDto updateRecipe(Long id, RecipeRequestDto requestDto, String username,List<MultipartFile> images)throws IOException {
         if(images.size()>5){throw new IllegalArgumentException("사진을 5장 이하로 넣어주세요");}
+        fileSizeCheck(images);
         User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECIPE));
         if (user.getRole()==(UserRoleEnum.ADMIN) || recipe.getUser().getUsername().equals(username)){
@@ -165,4 +169,12 @@ public class RecipeService {
         return true;
     }
 
+    private void fileSizeCheck(List<MultipartFile> images){
+        long fileSize = 0l;
+        for (MultipartFile image : images) {
+            fileSize+=image.getSize();
+        }
+        if(fileSize>fileSizeLimit){
+            throw new IllegalArgumentException("총 용량 10MB이하만 업로드 가능합니다");}
+    }
 }
