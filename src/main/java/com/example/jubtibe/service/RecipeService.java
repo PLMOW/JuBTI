@@ -86,7 +86,7 @@ public class RecipeService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CLIENT));
 
         int hasLike = 0;
-        if(recipeLikeRepository.findByUser(user).isPresent()) hasLike = 1;
+        if(recipeLikeRepository.findByUserAndRecipe(user, recipe).isPresent()) hasLike = 1;
 
         List<Comment> comment = commentRepository.findByRecipe(recipe);
         int likes = recipeLikeRepository.countByRecipe(recipe);
