@@ -1,7 +1,7 @@
 # JuBTI
 
 # 기능명세서
-<html> <head> <meta charset="EUC-KR"> <title>API 명세서</title> </head> <body> <table border="1"> <th>요구사항ID</th><th>요구사항 이름</th><th>요구사항 설명</th> <th>중요도</th> <th>비고</th> <tr><td></td> <td>메인페이지 출력</td>  <td>화면 중단에 게시판 형태 리스트</td> <td></td>  <td>로그인된 사용자만 가능</td>  </tr>
+<html> <head> <meta charset="EUC-KR"> </head> <body> <table border="1"> <th>요구사항ID</th><th>요구사항 이름</th><th>요구사항 설명</th> <th>중요도</th> <th>비고</th> <tr><td></td> <td>메인페이지 출력</td>  <td>화면 중단에 게시판 형태 리스트</td> <td></td>  <td>로그인된 사용자만 가능</td>  </tr>
 <tr><td></td><td>로그인 시</td> <td>세션? 쿠키? 활동하지않으면 일정시간후 로그아웃</td>   <td></td>  <td></td>  
 <tr><td></td><td>비로그인 시</td> <td>로그인 화면으로 강제 송출</td>   <td></td>  <td></td>
 <tr> <td></td> <td>네비게이션바</td> <td> - 메인페이지로 이동하는 좌측상단 로고아이콘<br>- 로그아웃 버튼 우측상단<br>- 글쓰기 폼으로 이동하는 우측하단 링크 "내 Recipe 추천"</td>  <td></td><td>로그인된 사용자만 가능</td>  </tr>
@@ -29,7 +29,7 @@
 
 
 # API 명세서
-<html> <head> <meta charset="EUC-KR"> <title>API 명세서</title> </head> <body> <table border="1"> <th>분류</th> <th>기능</th><th>Method</th><th>URL</th> <td>RequestHeader</td><td>ResponsHeader</td><th>RequestBody</th> <th>ResponseBody</th> 
+<html> <head> <meta charset="EUC-KR"> </head> <body> <table border="1"> <th>분류</th> <th>기능</th><th>Method</th><th>URL</th> <td>RequestHeader</td><td>ResponsHeader</td><th>RequestBody</th> <th>ResponseBody</th> 
 <tr><td rowspan="2" >회원</td> <td>회원가입</td>  <td>POST</td> <td>/api/user/signup</td> <td></td><td></td> <td>{<br>"id": "아이디",<br>"nickname": "닉네임",<br>"password": "비밀번호",<br>"passwordCheck": "비밀번호",<br>"MBTI": "ENFP"<br>}</td>  <td>200, "회원가입 완료됐습니다."</td></tr>
 <tr> <td>로그인</td><td>POST</td> <td>/api/user/login</td> <td></td><td>Authorization : Bearer <br>~~~~토큰값</td>  <td>{<br>"id": "아이디",<br>"password": "비밀번호"<br>}</td><td>200, "로그인 완료됐습니다."</td></tr>
 <tr><td rowspan="7" >레시피</td><td>작성</td> <td>POST</td> <td>/api/recipe</td> <td>Authorization : Bearer <br>~~~~토큰값</td><td></td>  <td>{<br>"MBTI": "ENFP",<br>"title": "레시피명"<br>"materiral": "재료"<br>}</td>  <td>200, "회원가입 완료됐습니다."</td></tr>
